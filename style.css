@@ -2,9 +2,15 @@ html {
   height: 100%;
   width: 100%;
 }
+h1 {
+  color: #fff;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #ccc;
+  font-size: 50px;
+}
 body {
-  color: #a00;
-  background-color: black;
+  background-color: #aaa;
+  color: white;
   text-align: center;
   display:block;
 }
@@ -13,4 +19,9 @@ table, tr, td {
   border-collapse: collapse;
   padding: 5px;
   color:white;
+}
+#main {
+  background: red;
+  padding-left: 5%;
+  padding-right: 5%;
 }
