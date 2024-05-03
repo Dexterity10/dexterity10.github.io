@@ -1,0 +1,31 @@
+/* html {
+  height: 100%;
+  width: 100%;
+}
+body {
+  color: #444444;
+  background-color: black;
+  text-align: center;
+  display:block;
+}
+table, tr, td {
+  border: solid white;
+  border-collapse: collapse;
+  padding: 5px;
+  color:white;
+  
+}
+table {
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+tr {
+  width: 300px;
+}
+td {
+  height: 100%;
+  width: 100px;
+  float: left;
+}
+ */
