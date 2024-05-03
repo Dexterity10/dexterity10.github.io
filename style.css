@@ -3,10 +3,13 @@ html {
   width: 100%;
 }
 h1 {
-  color: #f00;
   -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #6f6;
+  -webkit-text-stroke-color: #f0f;
   font-size: 50px;
+}
+h1, .title{
+  color: #f00;
+
 }
 body {
   background-color: #aaa;
@@ -24,8 +27,16 @@ table, tr, td {
   background: red;
   padding-left: 5%;
   padding-right: 5%;
+  
 }
 .page {
+  max-width: 49%;
   width: 45%;
 
+}
+.smallpage {
+  width: 10%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
