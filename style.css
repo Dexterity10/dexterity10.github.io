@@ -2,44 +2,67 @@ html {
   height: 100%;
   width: 100%;
 }
+
+a,
+a:link {
+  color: #f00;
+}
+
+a:visited {
+  color: #f0f;
+}
+
 h1 {
   -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #f0f;
+  -webkit-text-stroke-color: #fff;
   font-size: 50px;
 }
-h1, .title{
-  color: #f00;
+
+h1,
+.title {
+  color: #000;
 
 }
+
 body {
-  background-color: #aaa;
+  background-color: #333;
   color: white;
   text-align: center;
-  display:block;
 }
-table, tr, td {
+
+table,
+tr,
+td {
   border: solid white;
   border-collapse: collapse;
   padding: 5px;
-  color:white;
+  color: white;
 }
+
 #main {
   background: red;
   padding-left: 5%;
   padding-right: 5%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  
+
+
+
 }
+
 .page {
   max-width: 49%;
   width: 45%;
 
 }
-.smallpage {
-  padding: 5%;
+
+#chaptSel {
+  padding: 10%;
   background: green;
-  width: 10%;
-  
+  width: 80%;
+  margin: auto;
+
+}
+
+.thumb {
+  width: 30%;
+  display: inline-block;
 }
