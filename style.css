@@ -5,11 +5,13 @@ html {
 
 a,
 a:link {
-  color: #f00;
+  color: #fff;
 }
 
 a:visited {
-  color: #f0f;
+  color: #eee;
+  /* this should be changed to something not red
+  if the background stays red */
 }
 
 h1 {
@@ -43,8 +45,6 @@ td {
   background: red;
   padding-left: 5%;
   padding-right: 5%;
-
-
 
 }
 
