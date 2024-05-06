@@ -14,13 +14,13 @@ a:visited {
   if the background stays red */
 }
 
-h1 {
+h1,h2 {
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #fff;
   font-size: 50px;
 }
 
-h1,
+h1, h2,
 .title {
   color: #000;
 
