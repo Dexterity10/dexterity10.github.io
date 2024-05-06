@@ -8,7 +8,7 @@ function prev() { //immediate previous
   window.location.href = 'chapter' + showChapter + '.html';
 }
 function next() { // immediate next
-  showpage = Math.min(showChapter + 1, maxChapter);
+  showChapter = Math.min(showChapter + 1, maxChapter);
   window.location.href = 'chapter' + showChapter + '.html';
 }
 function recent() { // most recent chapter
