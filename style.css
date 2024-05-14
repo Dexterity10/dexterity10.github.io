@@ -32,17 +32,8 @@ body {
   text-align: center;
 }
 
-table,
-tr,
-td {
-  border: solid white;
-  border-collapse: collapse;
-  padding: 5px;
-  color: white;
-}
-
 #main {
-  background: red;
+  background: black;
   padding-left: 5%;
   padding-right: 5%;
 
@@ -67,5 +58,6 @@ td {
   display: inline-block;
 }
 .smallImg {
-  max-width: 5%;
+  width: 75px;
+  display: inline-block;
 }
