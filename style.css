@@ -14,49 +14,44 @@ a:visited {
   if the background stays red */
 }
 
-h1,h2 {
+h1,
+h2 {
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #fff;
   font-size: 50px;
 }
 
-h1, h2,
+h1,
+h2,
 .title {
   color: #000;
+  margin-left: auto;
+  margin-right: auto;
+}
 
+.middle {
+  padding-left: auto;
+  padding-right: auto;
+  text-align:center;
 }
 
 body {
   background-color: #333;
   color: white;
-  text-align: center;
-}
-
-#main {
-  background: black;
-  padding-left: 5%;
-  padding-right: 5%;
-
+  /* text-align: center; */
 }
 
 .page {
-  max-width: 49%;
-  width: 45%;
-
-}
-
-#chaptSel {
-  padding: 10%;
-  background: green;
-  width: 80%;
-  margin: auto;
-
+  width: 75%;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 .thumb {
   width: 30%;
   display: inline-block;
 }
+
 .smallImg {
   width: 75px;
   display: inline-block;
