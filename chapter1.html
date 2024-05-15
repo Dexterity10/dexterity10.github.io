@@ -12,84 +12,83 @@
 </head>
 
 <body>
-  <div class="middle">
+  <div class="mar-auto text-mid">
     <h1>BLACKOUT</h1>
     <h2>Chapter 1</h2>
-    <kbd class="kbd" href="index.html"> BACK </kbd> <br>
-    <kbd class="kbd" href="chapter1.html">
-      << </kbd>
-        <kbd class="kbd" onclick="prev();">
-          < </kbd>
-            <kbd class="kbd" onclick="next();"> > </kbd>
-            <kbd class="kbd" onclick="recent();"> >> </kbd>
-            </br>
-
-            <div class="carousel w-full">
-              <div id="slide1" class="carousel-item relative w-full">
-                <img src="pages/1-1.webp" class="w-1/2" />
-                <img src="pages/1-2.webp" class="w-1/2" />
-                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                  <a href="#slide1" class="btn btn-circle">❮</a>
-                  <a href="#slide2" class="btn btn-circle">❯</a>
-                </div>
-              </div>
-              <div id="slide2" class="carousel-item relative w-full">
-                <img src="pages/1-3.webp" class="w-1/2" />
-                <img src="pages/1-4.webp" class="w-1/2" />
-                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                  <a href="#slide1" class="btn btn-circle">❮</a>
-                  <a href="#slide3" class="btn btn-circle">❯</a>
-                </div>
-              </div>
-              <div id="slide3" class="carousel-item relative w-full">
-                <img src="pages/1-5.webp" class="w-1/2" />
-                <img src="pages/1-6.webp" class="w-1/2" />
-                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                  <a href="#slide2" class="btn btn-circle">❮</a>
-                  <a href="#slide4" class="btn btn-circle">❯</a>
-                </div>
-              </div>
-              <div id="slide4" class="carousel-item relative w-full">
-                <img src="pages/1-7.webp" class="w-1/2" />
-                <img src="pages/1-8.webp" class="w-1/2" />
-                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                  <a href="#slide3" class="btn btn-circle">❮</a>
-                  <a href="#slide5" class="btn btn-circle">❯</a>
-                </div>
-              </div>
-              <div id="slide5" class="carousel-item relative w-full">
-                <img src="pages/1-9.webp" class="w-1/2" />
-                <img src="pages/1-10.webp" class="w-1/2" />
-                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                  <a href="#slide4" class="btn btn-circle">❮</a>
-                  <a href="#slide6" class="btn btn-circle">❯</a>
-                </div>
-              </div>
-              <div id="slide6" class="carousel-item relative w-full">
-                <img src="pages/1-11.webp" class="w-1/2" />
-                <img src="pages/1-12.webp" class="w-1/2" />
-                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                  <a href="#slide5" class="btn btn-circle">❮</a>
-                  <a href="#slide7" class="btn btn-circle">❯</a>
-                </div>
-              </div>
-              <div id="slide7" class="carousel-item relative w-full">
-                <img src="pages/1-13.webp" class="w-1/2" />
-                <img src="pages/1-14.webp" class="w-1/2" />
-                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                  <a href="#slide6" class="btn btn-circle">❮</a>
-                  <a href="#slide8" class="btn btn-circle">❯</a>
-                </div>
-              </div>
-              <div id="slide8" class="carousel-item relative w-full">
-                <img src="pages/1-15.webp" class="w-1/2" />
-                <img src="pages/1-16.webp" class="w-1/2" />
-                <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                  <a href="#slide7" class="btn btn-circle">❮</a>
-                  <a href="#slide8" class="btn btn-circle">❯</a>
-                </div>
-              </div>
+    <a href="index.html"><kbd class="kbd"> BACK </kbd></a> <br>
+    <a href="chapter1.html"><kbd class="kbd">First</kbd></a>
+    <kbd class="kbd" onclick="prev();">Previous</kbd>
+        <kbd class="kbd" onclick="next();"> Next </kbd>
+        <kbd class="kbd" onclick="recent();"> Recent</kbd>
+        </br>
+<!-- everything above this comment should be in every chapter html file
+everything below this comment should be copy/pasted and edited to fit the chapter. -->
+        <div class="carousel w-full">
+          <div id="slide1" class="carousel-item relative w-full">
+            <img src="pages/1-1.webp" class="w-1/2" />
+            <img src="pages/1-2.webp" class="w-1/2" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+              <a href="#slide1" class="btn btn-circle">❮</a>
+              <a href="#slide2" class="btn btn-circle">❯</a>
             </div>
+          </div>
+          <div id="slide2" class="carousel-item relative w-full">
+            <img src="pages/1-3.webp" class="w-1/2" />
+            <img src="pages/1-4.webp" class="w-1/2" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+              <a href="#slide1" class="btn btn-circle">❮</a>
+              <a href="#slide3" class="btn btn-circle">❯</a>
+            </div>
+          </div>
+          <div id="slide3" class="carousel-item relative w-full">
+            <img src="pages/1-5.webp" class="w-1/2" />
+            <img src="pages/1-6.webp" class="w-1/2" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+              <a href="#slide2" class="btn btn-circle">❮</a>
+              <a href="#slide4" class="btn btn-circle">❯</a>
+            </div>
+          </div>
+          <div id="slide4" class="carousel-item relative w-full">
+            <img src="pages/1-7.webp" class="w-1/2" />
+            <img src="pages/1-8.webp" class="w-1/2" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+              <a href="#slide3" class="btn btn-circle">❮</a>
+              <a href="#slide5" class="btn btn-circle">❯</a>
+            </div>
+          </div>
+          <div id="slide5" class="carousel-item relative w-full">
+            <img src="pages/1-9.webp" class="w-1/2" />
+            <img src="pages/1-10.webp" class="w-1/2" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+              <a href="#slide4" class="btn btn-circle">❮</a>
+              <a href="#slide6" class="btn btn-circle">❯</a>
+            </div>
+          </div>
+          <div id="slide6" class="carousel-item relative w-full">
+            <img src="pages/1-11.webp" class="w-1/2" />
+            <img src="pages/1-12.webp" class="w-1/2" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+              <a href="#slide5" class="btn btn-circle">❮</a>
+              <a href="#slide7" class="btn btn-circle">❯</a>
+            </div>
+          </div>
+          <div id="slide7" class="carousel-item relative w-full">
+            <img src="pages/1-13.webp" class="w-1/2" />
+            <img src="pages/1-14.webp" class="w-1/2" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+              <a href="#slide6" class="btn btn-circle">❮</a>
+              <a href="#slide8" class="btn btn-circle">❯</a>
+            </div>
+          </div>
+          <div id="slide8" class="carousel-item relative w-full">
+            <img src="pages/1-15.webp" class="w-1/2" />
+            <img src="pages/1-16.webp" class="w-1/2" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+              <a href="#slide7" class="btn btn-circle">❮</a>
+              <a href="#slide8" class="btn btn-circle">❯</a>
+            </div>
+          </div>
+        </div>
   </div>
 </body>
 
