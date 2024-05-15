@@ -25,20 +25,25 @@ h1,
 h2,
 .title {
   color: #000;
-  margin-left: auto;
-  margin-right: auto;
+}
+.text-mid {
+  text-align: center;
 }
 
-.middle {
+.pad-mid {
   padding-left: auto;
   padding-right: auto;
-  text-align:center;
+  
+}
+.mar-mid {
+  margin-left: auto;
+  margin-right: auto;
+  
 }
 
-body {
+body, footer {
   background-color: #333;
   color: white;
-  /* text-align: center; */
 }
 
 .page {
