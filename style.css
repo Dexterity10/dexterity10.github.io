@@ -8,21 +8,13 @@ a:link {
   color: #fff;
 }
 
-a:visited {
-  color: #eee;
-  /* this should be changed to something not red
-  if the background stays red */
-}
-
 h1,
 h2 {
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #fff;
   font-size: 50px;
+  
 }
-
-h1,
-h2,
 .title {
   color: #000;
 }
@@ -30,15 +22,13 @@ h2,
   text-align: center;
 }
 
-.pad-mid {
+.pad-auto {
   padding-left: auto;
   padding-right: auto;
-  
 }
-.mar-mid {
+.mar-auto {
   margin-left: auto;
   margin-right: auto;
-  
 }
 
 body, footer {
