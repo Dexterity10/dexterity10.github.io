@@ -4,7 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Chapter 1</title>
+  <title>Chapter 1</title> <!--
+    Change to chapter name/page name just to make it look a bit better
+  -->
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.11.1/dist/full.min.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="style.css">
@@ -13,21 +15,24 @@
 
 <body>
   <div class="mar-auto text-mid">
-    <h1>BLACKOUT</h1>
-    <h2>Chapter 1</h2>
-    <a href="index.html"><button class="kbd btn-sm"> BACK </button></a><br>
+    <h1>BLACKOUT: Chapter 1</h1>
+    <!-- Website nav -->
+    <a href="chapter1.html"><button class="kbd btn-sm">Start Reading</button></a>
+    <a href="chapterselect.html"><button class="kbd btn-sm">Choose a Chapter</button></a>
+    <a href="credits.html"><button class="kbd btn-sm">Credits</button></a>
+    <br>
+    <!-- Chapter nav -->
     <a href="chapter1.html"><button class="kbd btn-sm"> FIRST </button></a>
     <button class="kbd btn-sm" onclick="prev();"> PREVIOUS </button>
     <button class="kbd btn-sm" onclick="next();"> NEXT </button>
-    <button class="kbd btn-sm" onclick="recent();"> RECENT </button>
+    <button class="kbd btn-sm" onclick="recent();"> RECENT </button><br>
 
-    </br>
-    <!-- everything above this comment should be in every chapter html file
-everything below this comment should be copy/pasted and edited to fit the chapter. -->
-    <div class="carousel w-full">
+    <div class="carousel size-3/5">
       <div id="slide1" class="carousel-item relative w-full">
+        <!-- The two pages shown per window-->
         <img src="pages/placeholder.webp" class="w-1/2" />
         <img src="pages/1-2.webp" class="w-1/2" />
+        <!-- the left and right controls -->
         <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
           <a href="#slide1" class="btn btn-circle">❮</a>
           <a href="#slide2" class="btn btn-circle">❯</a>
@@ -90,7 +95,9 @@ everything below this comment should be copy/pasted and edited to fit the chapte
         </div>
       </div>
     </div>
+    <br>
   </div>
 </body>
+
 
 </html>
