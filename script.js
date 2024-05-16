@@ -1,5 +1,5 @@
 showChapter = 1;
-maxChapter = 2;
+maxChapter = 1;
 
 // "first" button takes you to chapter 1 regardless of where you are
 
