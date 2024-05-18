@@ -15,7 +15,7 @@
 
 <body>
   <div class="mar-auto text-mid">
-    <div class="navbar bg-base-100"> <!-- Chapter-specific Website Nav -->
+    <div class="navbar bg-base-100"> <!-- Website Nav -->
       <div class="navbar-start">
         <div class="dropdown">
           <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
@@ -24,21 +24,27 @@
             </svg>
           </div>
           <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+            <li><a href="index.html">Home</a></li>
             <li><a href="chapter1.html">Start Reading</a></li>
             <li><a href="chapterselect.html">Chapter Select</a></li>
             <li><a href="credits.html">About</a></li>
           </ul>
         </div>
+      </div>
+      <div class="navbar-center">
         <a class="btn btn-ghost text-xl" href="index.html">BLACKOUT</a>
-        <p class="text-l">Chapter 1</p>
+        Chapter 1
+      </div>
+      <div class="navbar-end">
+  
       </div>
     </div>
     <div> <!-- Chapter nav -->
-    <a href="chapter1.html" class="kbd"> ⇤ </a>
-    <button class="kbd" onclick="prev();"> ← </button>
-    <button class="kbd" onclick="next();"> → </button>
-    <button class="kbd" onclick="recent();"> ⇥ </button>
-  </div>
+      <a href="chapter1.html" class="kbd"> ⇤ </a>
+      <button class="kbd" onclick="prev();"> ← </button>
+      <button class="kbd" onclick="next();"> → </button>
+      <button class="kbd" onclick="recent();"> ⇥ </button>
+    </div>
     <!-- Start of chapter -->
     <div class="carousel size-3/5">
       <div id="slide1" class="carousel-item relative w-full">
