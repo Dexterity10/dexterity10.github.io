@@ -17,11 +17,22 @@
 
   <div class="text-mid mar-5">
     <h1>Chapter Select</h1>
-    <div>
-      <!-- Web Nav div -->
-      <a href="chapter1.html"><button class="kbd "> Start Reading </button></a>
-      <a href="chapterselect.html"><button class="kbd "> Chapter Select </button></a>
-      <a href="index.html"><button class="kbd "> Home </button></a>
+    <div class="navbar bg-base-100"> <!-- Website Nav -->
+      <div class="navbar-start">
+        <div class="dropdown">
+          <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+            </svg>
+          </div>
+          <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+            <li><a href="chapter1.html">Start Reading</a></li>
+            <li><a href="chapterselect.html">Chapter Select</a></li>
+            <li><a href="credits.html">About</a></li>
+          </ul>
+        </div>
+        <a class="btn btn-ghost text-xl" href="index.html">BLACKOUT</a>
+      </div>
     </div>
     <div class="grid grid-cols-1 gap-y-10">
       <!-- Remove html in comments when those chapters release -->
