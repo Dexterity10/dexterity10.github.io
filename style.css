@@ -1,11 +1,12 @@
 html {
   height: 100%;
   width: 100%;
+
 }
 
-a,
-a:link {
-  color: #fff;
+.kdb {
+  color:red;
+  background-color: black;
 }
 
 h1,
