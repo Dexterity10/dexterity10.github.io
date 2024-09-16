@@ -16,7 +16,7 @@ Step 6: Go into chapterselect.html and un-comment the read chapter button (click
 
 Quick Help
 # I put a file (html,png,etc.) in a sub folder and it's not showing up!
-When calling a file, you need to also call the folder it's put into. within the src or href, add [folder name]/ before the file name. For instance, if you have the png "oak" in the folder "trees", you'd call it as src="trees/oak.png" within an <img> tag.
+When calling a file, you need to also call the folder it's put into. within the src or href, add [folder name]/ before the file name. For instance, if you have the png "oak" in the folder "trees", you'd call it as src="trees/oak.png" within an img tag.
 
 # I saved the file, but it's not showing up on the website!
 If you're still using GitHub, make sure you've saved all changes, hit publish (cmd+p) in GitHub Desktop, and then wait 10-30 seconds for GitHub to think about what it should be doing.
