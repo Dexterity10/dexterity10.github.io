@@ -1,0 +1,49 @@
+#navbar-grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    
+    color: white;
+    gap: 2%;
+    margin: 0 5% 0 5%;
+}
+
+#navbar-grid>div {
+    background-color: blue;
+    font-size: 2em;
+}
+
+.main-grid {
+    
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+
+    color: white;
+    gap: 2%;
+    margin: 0 5% 0 5%;
+}
+
+.main-grid>div {
+    font-size: 1.5em;
+    
+    background-color: red;
+}
+
+body {
+
+    background-color: black;
+    color: white;
+    display: block;
+    margin: 0 auto 0 auto;
+    text-align: center;
+}
+
+#page1 {
+    display: block;
+}
+#page2 {
+    display: none;
+}
+#page3 {
+    display: none;
+}
