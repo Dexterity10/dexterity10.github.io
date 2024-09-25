@@ -1,19 +1,21 @@
+<!DOCTYPE html>
 <header>
     <link rel="stylesheet" href="golemstyle.css">
     <script src="golemscript.js"></script>
 </header>
 
-<body>
-    <h1>Big thing</h1>
-    <h2>slightly smaller thing</h2>
+<body onload="start()">
+    <h1 id="currency">30 Pebbles</h1>
+    <h2 id="perSecond">0/s</h2>
+    <h2 id="capacity">0/0</h2>
 
     <div id="navbar-grid">
         <!-- navigation -->
         <div id="page1button">
-            <button onclick="selectPage(1)">First Button</button>
+            <button onclick="selectPage(1)">Golems</button>
         </div>
         <div id="page2button">
-            <button onclick="selectPage(2)">Second Button</button>
+            <button onclick="selectPage(2)">Automation</button>
         </div>
         <div id="page3button">
             <button onclick="selectPage(3)">Third Button</button>
@@ -21,14 +23,59 @@
     </div>
     <div class="main-grid">
         <!-- main body of everything going on -->
-        <div id="page1">
-            First Page
+        <div id="page1" class="nicebox">
+            <div>
+                <div id="g1stats"> 0 Golems</div>
+                <button onclick="buyGolem(1)"> Pebble Golem </button>
+            </div>
+            <div>
+                <div id="g2stats"> 0 Golems</div>
+                <button onclick="buyGolem(2)"> Stone Golem </button>
+            </div>
+            <div>
+                <div id="g3stats"> 0 Golems</div>
+                <button onclick="buyGolem(3)"> Rock Golem </button>
+            </div>
+            <div>
+                <div id="g4stats"> 0 Golems</div>
+                <button onclick="buyGolem(4)"> Boulder Golem </button>
+            </div>
+            <div>
+                <div id="g5stats"> 0 Golems</div>
+                <button onclick="buyGolem(5)"> Mountain Golem </button>
+            </div>
         </div>
-        <div id="page2">
-            Second Page
+        <div id="page2" class="nicebox">
+            <div>
+                <div id="g1auto">
+                    <button onclick="buyAuto(1)"> Pebble Automation [300 Pebbles] </button>
+                </div>
+            </div>
+            <div>
+                <div id="g2auto">
+                    <button onclick="buyAuto(2)"> Stone Automation [10 Pebble Golems] </button>
+                </div>
+            </div>
+            <div>
+                <div id="g3auto">
+                    <button onclick="buyAuto(3)"> Rock Automation [10 Stone Golems]</button>
+                </div>
+            </div>
+            <div>
+                <div id="g4auto">
+                    <button onclick="buyAuto(4)"> Boulder Automation [10 Rock Golems] </button>
+                </div>
+            </div>
+            <div>
+                <div id="g5auto">
+                    <button onclick="buyAuto(5)"> Mountain Automation [10 Boulder Golems] </button>
+                </div>
+            </div>
         </div>
-        <div id="page3">
+        <br>
+        <div id="page3" class="nicebox">
             Third Page
         </div>
+        <br>
     </div>
 </body>
