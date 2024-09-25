@@ -1,21 +1,28 @@
 
 function start() {
     // on load function
-    var page1 = document.getElementById("page1");
-    var page2 = document.getElementById("page2");
-    var page3 = document.getElementById("page3");
-    var currency = document.getElementById('currency');
-    perSecond = document.getElementById('perSecond');
-    rps = 0;
-    golemName = ['', 'Pebble', 'Rock', 'Stone', 'Boulder', 'Mountain'];
-    golemBank = [30, 0, 0, 0, 0, 0];
-    golemIsAuto = [, 0, 0, 0, 0, 0];
+    page1 = document.getElementById("page1");
+    page2 = document.getElementById("page2");
+    page3 = document.getElementById("page3");
+    type2 = document.getElementById('type2');
+    type3 = document.getElementById('type3');
+
+    currency = document.getElementById('currency');
+    // the per second object
+    perSecond = {
+        id: document.getElementById('perSecond'),
+        type1: 0,
+        type2: 0
+    };
+    golemName = ['', 'Pebble', 'Rock', 'Stone', 'Boulder', 'Mountain', 'Raw Iron', 'Iron Nugget', 'Iron Ingot', 'Iron Lump', 'Iron Block'];
+    golemBank = [30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    golemIsAuto = [, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     golemCap = [0, 21];
     // A max of 21 allows for a max mountain golem count of 13.
 
 
 
-    for (i = 1; i < 6; i++) {
+    for (i = 1; i < 11; i++) {
         // creates the variables g1-g5
         eval('g' + i + '= document.getElementById(' + "'" + 'g' + i + 'stats' + "'" + ');');
         // creates the variables g1auto-g5auto
@@ -40,10 +47,11 @@ function start() {
 
 }
 function updateScreen() {
-    rps = 0;
-    for (let i = 1; i < 6; i++) {
-        // calculate rps once every second
-        rps += golemBank[i] * 2 ** (i - 1);
+    perSecond.type1 = 0;
+    for (i = 1; i < 6; i++) {
+        // calculate pebbles/s once every second
+        perSecond.type1 += golemBank[i] * 2 ** (i - 1);
+        perSecond.type2 += golemBank[i + 5] * 3 ** (i - 1);
     }
     // check what the current capacity is
     golemCap[0] = 0;
@@ -51,10 +59,10 @@ function updateScreen() {
         golemCap[0] += golemBank[i];
     }
     capacity.innerHTML = golemCap[0] + "/" + golemCap[1] + " Golems";
-    perSecond.innerHTML = rps + "/s";
+    perSecond.id.innerHTML = (perSecond.type1 + perSecond.type2) + "/s";
     currency.innerHTML = golemBank[0] + " Pebbles";
 
-    for (i = 1; i < 6; i++) {
+    for (i = 1; i < 11; i++) {
         // "change the innerHTML of g1,g2,g3,g4,g5"
         eval('g' + i).innerHTML = golemBank[i] + " " + golemName[i] + " Golem" + isPlural(i);
     }
@@ -62,13 +70,12 @@ function updateScreen() {
 }
 function increment(ID) {
     // pebbles per second
-    golemBank[0] += rps;
+    golemBank[0] += perSecond.type1;
     for (i = 1; i < 6; i++) {
         if (golemIsAuto[i] == 1) {
             buyGolem(i);
         }
     }
-
 }
 function isPlural(ID) {
     if (golemBank[ID] > 1) {
@@ -107,11 +114,26 @@ function buyGolem(ID) {
             golemCap[0]++;
         }
     }
-    else if (golemBank[ID - 1] >= 3) {
-
-        golemBank[ID - 1] -= 3;
-        golemBank[ID]++;
+    if (ID == 6) {
+        if (golemBank[ID - 1] >= 10) {
+            golemBank[ID - 1] -= 10;
+            golemBank[ID]++;
+        }
     }
+    if (ID < 6) {
+        if (golemBank[ID - 1] >= 3) {
+            golemBank[ID - 1] -= 3;
+            golemBank[ID]++;
+        }
+    }
+    if (6 < ID < 11) {
+        if (golemBank[ID - 1] >= 5) {
+            golemBank[ID - 1] -= 5;
+            golemBank[ID]++;
+        }
+    }
+
+
 }
 function buyAuto(ID) {
     if (ID == 1) {
@@ -126,5 +148,20 @@ function buyAuto(ID) {
         golemIsAuto[ID]++;
         eval('g' + ID + 'auto').innerHTML = "Bought!";
 
+    }
+}
+function buyType(type) {
+    if (type == 2) {
+        // buy iron golems
+        if (golemBank[0] >= 100000 && golemBank[5] >= 10) {
+            type2.style.display = "block";
+            type2.innerHTML = "Upgraded!";
+            golemBank[0] -= 100000;
+            golemBank[5] -= 5;
+            
+        }
+    }
+    if (type == 3) {
+        // buy next golems
     }
 }
