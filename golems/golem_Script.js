@@ -1,3 +1,5 @@
+import Golem from 'golem.js'
+
 
 function start() {
     // on load function
@@ -15,7 +17,10 @@ function start() {
         type2: 0
     };
     golemName = ['', 'Pebble', 'Rock', 'Stone', 'Boulder', 'Mountain', 'Raw Iron', 'Iron Nugget', 'Iron Ingot', 'Iron Lump', 'Iron Block'];
-    golemBank = [30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    for (i = 1; i < 10; i++) {
+        eval("golem" + i) = new Golem(golemName[i], 0);
+    }
+    pebbles = 0
     golemIsAuto = [, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     golemCap = [0, 21];
     // A max of 21 allows for a max mountain golem count of 13.
@@ -60,17 +65,17 @@ function updateScreen() {
     }
     capacity.innerHTML = golemCap[0] + "/" + golemCap[1] + " Golems";
     perSecond.id.innerHTML = (perSecond.type1 + perSecond.type2) + "/s";
-    currency.innerHTML = golemBank[0] + " Pebbles";
+    currency.innerHTML = pebbles + " Pebbles";
 
     for (i = 1; i < 11; i++) {
         // "change the innerHTML of g1,g2,g3,g4,g5"
-        eval('g' + i).innerHTML = golemBank[i] + " " + golemName[i] + " Golem" + isPlural(i);
+        eval('g' + i).innerHTML = golemBank[i] + ' ' + golemName[i] + ' Golem ${golemBank[i] > 1 ? "s" : ""}';
     }
 
 }
 function increment(ID) {
     // pebbles per second
-    golemBank[0] += perSecond.type1;
+    pebbles += perSecond.type1;
     for (i = 1; i < 6; i++) {
         if (golemIsAuto[i] == 1) {
             buyGolem(i);
@@ -107,9 +112,9 @@ function selectPage(button) {
 
 function buyGolem(ID) {
     if (ID == 1) {
-        if (golemBank[0] >= 30 && golemCap[0] != golemCap[1]) {
+        if (pebbles >= 30 && golemCap[0] != golemCap[1]) {
 
-            golemBank[0] -= 30;
+            pebbles -= 30;
             golemBank[ID]++;
             golemCap[0]++;
         }
@@ -137,8 +142,8 @@ function buyGolem(ID) {
 }
 function buyAuto(ID) {
     if (ID == 1) {
-        if (golemBank[0] >= 300) {
-            golemBank[0] -= 30;
+        if (pebbles >= 300) {
+            pebbles -= 30;
             golemIsAuto[ID]++;
             g1auto.innerHTML = "Bought!";
         }
@@ -153,12 +158,12 @@ function buyAuto(ID) {
 function buyType(type) {
     if (type == 2) {
         // buy iron golems
-        if (golemBank[0] >= 100000 && golemBank[5] >= 10) {
+        if (pebbles >= 100000 && golemBank[5] >= 10) {
             type2.style.display = "block";
             type2.innerHTML = "Upgraded!";
-            golemBank[0] -= 100000;
+            pebbles -= 100000;
             golemBank[5] -= 5;
-            
+
         }
     }
     if (type == 3) {
