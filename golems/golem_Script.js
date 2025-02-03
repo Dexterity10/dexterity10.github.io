@@ -87,7 +87,6 @@ function isPlural(ID) {
         return 's';
     }
     else return '';
-
 }
 
 setInterval(updateScreen, 100);
