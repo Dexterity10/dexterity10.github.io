@@ -1,12 +1,17 @@
-table, th, td {
+table,
+th,
+td {
     border: 1px solid;
 }
+
 td {
     padding: 10px;
 }
+
 th {
-    background-color:#c8995d;
+    background-color: #c8995d;
 }
+
 body {
     background-color: #dcbf9a;
 }
