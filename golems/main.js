@@ -73,12 +73,16 @@ function updateGUI() {
         let g = generators[i];
         document.getElementById("gen" + i).innerHTML = "Amount: " + g.amount + "<br>Bought: " + g.bought + "<br>Mult: " + format(g.mult) + "x<br>Cost: " + format(g.cost);
         if (!automators[i].isBought) {
-            document.getElementById("auto" + i).innerHTML = "Requires: " + automators[i].cost + "<br>" + (i + 1) + " Golems"
+            document.getElementById("auto" + i).innerHTML = "Autobuy<br>Requires: " + automators[i].cost
         } else {
             if (automators[i].isOn) {
-                document.getElementById("auto" + i).textContent = "Golem " + (i + 1) + " automator: On"
+                document.getElementById("auto" + i).textContent = "Autobuy: On"
+                document.getElementById("auto" + i).classList.add('autoOn');
+                document.getElementById("auto" + i).classList.remove('autoOff');
             } else {
-                document.getElementById("auto" + i).textContent = "Golem " + (i + 1) + " automator: Off"
+                document.getElementById("auto" + i).textContent = "Autobuy: Off"
+                document.getElementById("auto" + i).classList.add('autoOff');
+                document.getElementById("auto" + i).classList.remove('autoOn');
             }
         }
     }
@@ -95,7 +99,6 @@ function productionLoop(diff) {
     for (let i = 0; i < 5; i++) {
         currency += getProduction() * diff;
     }
-
 }
 function automationLoop() {
     for (let i = 0; i < 5; i++) {
@@ -108,6 +111,7 @@ function toggleAuto(index) {
     a = automators[index]
     if (a.isBought) {
         a.isOn = !a.isOn
+
     } else {
         if (a.cost > generators[index].amount) return
         a.isOn = !a.isOn
