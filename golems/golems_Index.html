@@ -4,14 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
+    <title>Offline File</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="main.js"></script>
+
 </head>
 
 <body>
-    <button onclick="increaseClicks()"> Click Me </button>
-    <div id="clicks">clicks: 0</div>
+    <div id="currency"> 30 Stones </div>
+    <div class="generators-container">
+        <div class="generator" id="gen1" onclick="buyGenerator(0)"></div>
+        <div class="generator" id="gen2" onclick="buyGenerator(1)"></div>
+        <div class="generator" id="gen3" onclick="buyGenerator(2)"></div>
+        <div class="generator" id="gen4" onclick="buyGenerator(3)"></div>
+        <div class="generator" id="gen5" onclick="buyGenerator(4)"></div>
+    </div>
 </body>
+<script src="main.js"></script>
 
 </html>

@@ -1,3 +1,27 @@
-body {
-    color: red;
+* {
+    box-sizing: border-box;
+}
+
+#currency {
+    margin: 40px;
+    font-size: 3em;
+    text-align: center;
+}
+
+.generators-container {
+    display: flex;
+    width: 1000px;
+    flex-wrap: wrap;
+    margin: auto;
+}
+
+.generator {
+    display: flex;
+    border: 2px solid khaki;
+    background-color: beige;
+    text-align: center;
+    width: 200px;
+    padding: 15px;
+    font-size: 1.3em;
+    cursor: pointer;
 }
