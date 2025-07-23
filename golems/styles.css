@@ -19,7 +19,7 @@
 #cap,
 #perSecond {
     text-align: center;
-    width: 200px;
+    width: 150px;
     padding: 15px;
     font-size: 1.3em;
     cursor: pointer;
@@ -27,18 +27,20 @@
 
 .generators-container {
     display: flex;
-    width: 1000px;
+    width: 1080px;
     flex-wrap: wrap;
     margin: auto;
 }
 
-.generator {
+.generator,
+.automator {
     display: flex;
     border: 2px solid khaki;
     background-color: beige;
     text-align: center;
     width: 200px;
     padding: 15px;
+    margin: 8px;
     font-size: 1.3em;
     cursor: pointer;
 }

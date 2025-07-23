@@ -15,7 +15,7 @@ class Golem {
 var currency = 90
 var generators = []
 var lastUpdate = Date.now()
-var maxcap = 18
+var maxcap = 21
 var totalAmount = 0
 
 for (let i = 0; i < 5; i++) {
@@ -64,15 +64,32 @@ function updateGUI() {
     document.getElementById("perSecond").textContent = getProduction() + " Stone /s";
     for (let i = 0; i < 5; i++) {
         let g = generators[i];
-        document.getElementById("gen" + (i + 1)).innerHTML = "Amount: " + format(g.amount) + "<br>Bought: " + g.bought + "<br>Mult: " + format(g.mult) + "x<br>Cost: " + format(g.cost);
+        document.getElementById("gen" + i).innerHTML = "Amount: " + g.amount + "<br>Bought: " + g.bought + "<br>Mult: " + format(g.mult) + "x<br>Cost: " + format(g.cost);
     }
 }
 
+function getProduction() {
+    let sum = 0
+    for (let i = 0; i < 5; i++) {
+        sum += generators[i].amount * generators[i].mult
+    }
+    return sum
+}
 function productionLoop(diff) {
     for (let i = 0; i < 5; i++) {
         currency += getProduction() * diff;
     }
 
+}
+function automationLoop() {
+    for (let i = 1; i < 5; i++) {
+        let g = generators[i]
+        if (generators[i - 1].amount >= g.cost) {
+            generators[i - 1].amount -= g.cost
+            g.amount++
+            g.bought++
+        }
+    }
 }
 
 function mainLoop(diff) {
@@ -80,15 +97,9 @@ function mainLoop(diff) {
 
     productionLoop(diff)
     updateGUI()
+    automationLoop()
 
     lastUpdate = Date.now()
-}
-function getProduction() {
-    let sum = 0
-    for (let i = 0; i < 5; i++) {
-        sum += generators[i].amount * generators[i].mult
-    }
-    return sum
 }
 setInterval(mainLoop, 50)
 
