@@ -82,12 +82,13 @@ function productionLoop(diff) {
 
 }
 function automationLoop() {
+    if (currency >= generators[0].cost) {
+        buyGenerator(0)
+    }
     for (let i = 1; i < 5; i++) {
         let g = generators[i]
         if (generators[i - 1].amount >= g.cost) {
-            generators[i - 1].amount -= g.cost
-            g.amount++
-            g.bought++
+            buyGenerator(i)
         }
     }
 }
