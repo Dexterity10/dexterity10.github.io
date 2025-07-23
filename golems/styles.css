@@ -44,3 +44,11 @@
     font-size: 1.3em;
     cursor: pointer;
 }
+
+.autoOn {
+    background-color: lightgreen;
+}
+
+.autoOff {
+    background-color: coral;
+}

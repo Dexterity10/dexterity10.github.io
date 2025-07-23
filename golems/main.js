@@ -14,6 +14,7 @@ class Golem {
 
 var currency = 90
 var generators = []
+var automators = []
 var lastUpdate = Date.now()
 var maxcap = 21
 var totalAmount = 0
@@ -26,6 +27,12 @@ for (let i = 0; i < 5; i++) {
         mult: 2 ** i,
     }
     generators.push(generator)
+    let automator = {
+        isOn: false,
+        isBought: false,
+        cost: 10
+    }
+    automators.push(generator)
 }
 generators[0].cost = 30;
 
@@ -81,15 +88,20 @@ function productionLoop(diff) {
     }
 
 }
-function automationLoop() {
-    if (currency >= generators[0].cost) {
-        buyGenerator(0)
+function automationLoop(index) {
+    if (automators[index]) {
+        buyGenerator(index)
     }
-    for (let i = 1; i < 5; i++) {
-        let g = generators[i]
-        if (generators[i - 1].amount >= g.cost) {
-            buyGenerator(i)
-        }
+}
+function toggleAuto(index) {
+    a = automators[index]
+    if (a.isBought) {
+        a.isOn = !a.isOn
+    } else {
+        if (a.cost > generators[index].amount) return
+        generators[index].amount -= 10
+        a.isOn = !a.isOn
+        a.isBought = true
     }
 }
 
