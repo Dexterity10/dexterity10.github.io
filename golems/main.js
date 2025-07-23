@@ -12,15 +12,11 @@ class Golem {
     getCost = () => cost;
 }
 
-var currency = 30
+var currency = 9
 var generators = []
 var lastUpdate = Date.now()
 
-let generator = {
-    cost: 30, bought: 0, amount: 0, mult: 1
-}
-generators.push(generator)
-for (let i = 1; i < 5; i++) {
+for (let i = 0; i < 5; i++) {
     let generator = {
         cost: 3,
         bought: 0,
@@ -44,10 +40,11 @@ function buyGenerator(index) {
         currency -= g.cost
         g.amount++
         g.bought++
+        return "bought golem " + index
     }
     else {
-        if (g < 3) return
-        generators[index + 1].amount -= g.cost
+        if (generators[index - 1].amount < 3) return
+        generators[index - 1].amount -= g.cost
         g.amount++
         g.bought++
     }
@@ -63,7 +60,7 @@ function updateGUI() {
 
 function productionLoop(diff) {
     for (let i = 0; i < 5; i++) {
-        currency += generators[i].amount * (generators[i].mult * 2 ** i) * diff;
+        currency += generators[i].amount * (generators[i].mult * 2 ** i) * diff / 10;
     }
 
 }
