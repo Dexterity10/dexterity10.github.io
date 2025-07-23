@@ -12,9 +12,11 @@ class Golem {
     getCost = () => cost;
 }
 
-var currency = 9
+var currency = 90
 var generators = []
 var lastUpdate = Date.now()
+var maxcap = 18
+var totalAmount = 0
 
 for (let i = 0; i < 5; i++) {
     let generator = {
@@ -25,6 +27,7 @@ for (let i = 0; i < 5; i++) {
     }
     generators.push(generator)
 }
+generators[0].cost = 30;
 
 function format(amount) {
     let power = Math.floor(Math.log10(amount));
@@ -36,11 +39,10 @@ function format(amount) {
 function buyGenerator(index) {
     let g = generators[index]
     if (index == 0) {
-        if (g.cost > currency) return
+        if (g.cost > currency || totalAmount == maxcap) return
         currency -= g.cost
         g.amount++
         g.bought++
-        return "bought golem " + index
     }
     else {
         if (generators[index - 1].amount < 3) return
@@ -48,10 +50,18 @@ function buyGenerator(index) {
         g.amount++
         g.bought++
     }
+
+    let sum = 0
+    for (let i = 0; i < 5; i++) {
+        sum += generators[i].amount
+    }
+    totalAmount = sum
 }
 
 function updateGUI() {
-    document.getElementById("currency").textContent = format(currency) + " Stones";
+    document.getElementById("firstRow").textContent = format(currency) + " Stones";
+    document.getElementById("cap").textContent = totalAmount + "/" + maxcap;
+    document.getElementById("perSecond").textContent = getProduction() + " Stone /s";
     for (let i = 0; i < 5; i++) {
         let g = generators[i];
         document.getElementById("gen" + (i + 1)).innerHTML = "Amount: " + format(g.amount) + "<br>Bought: " + g.bought + "<br>Mult: " + format(g.mult) + "x<br>Cost: " + format(g.cost);
@@ -60,7 +70,7 @@ function updateGUI() {
 
 function productionLoop(diff) {
     for (let i = 0; i < 5; i++) {
-        currency += generators[i].amount * (generators[i].mult * 2 ** i) * diff / 10;
+        currency += getProduction() * diff;
     }
 
 }
@@ -73,7 +83,13 @@ function mainLoop(diff) {
 
     lastUpdate = Date.now()
 }
-
+function getProduction() {
+    let sum = 0
+    for (let i = 0; i < 5; i++) {
+        sum += generators[i].amount * generators[i].mult
+    }
+    return sum
+}
 setInterval(mainLoop, 50)
 
 updateGUI()

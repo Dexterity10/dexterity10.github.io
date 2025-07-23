@@ -2,10 +2,27 @@
     box-sizing: border-box;
 }
 
-#currency {
+
+#firstRow {
     margin: 40px;
     font-size: 3em;
     text-align: center;
+}
+
+#secondRow {
+    display: flex;
+    width: 1000px;
+    margin: auto;
+    text-align: right;
+}
+
+#cap,
+#perSecond {
+    text-align: center;
+    width: 200px;
+    padding: 15px;
+    font-size: 1.3em;
+    cursor: pointer;
 }
 
 .generators-container {
