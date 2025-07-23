@@ -30,9 +30,9 @@ for (let i = 0; i < 5; i++) {
     let automator = {
         isOn: false,
         isBought: false,
-        cost: 10
+        cost: 11
     }
-    automators.push(generator)
+    automators.push(automator)
 }
 generators[0].cost = 30;
 
@@ -88,20 +88,28 @@ function productionLoop(diff) {
     }
 
 }
-function automationLoop(index) {
-    if (automators[index]) {
-        buyGenerator(index)
+function automationLoop() {
+    for (let i = 0; i < 5; i++) {
+        if (automators[i].isOn) {
+            buyGenerator(i)
+        }
     }
 }
 function toggleAuto(index) {
     a = automators[index]
     if (a.isBought) {
         a.isOn = !a.isOn
+        if (a.isOn) {
+            document.getElementById("auto" + index).textContent = "Golem " + (index + 1) + " automator: On"
+        } else {
+            document.getElementById("auto" + index).textContent = "Golem " + (index + 1) + " automator: Off"
+        }
     } else {
         if (a.cost > generators[index].amount) return
-        generators[index].amount -= 10
+        generators[index].amount -= a.cost - 1
         a.isOn = !a.isOn
         a.isBought = true
+        document.getElementById("auto" + index).textContent = "Golem " + (index + 1) + " automator: On"
     }
 }
 
