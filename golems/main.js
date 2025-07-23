@@ -30,7 +30,7 @@ for (let i = 0; i < 5; i++) {
     let automator = {
         isOn: false,
         isBought: false,
-        cost: 11
+        cost: 10
     }
     automators.push(automator)
 }
@@ -72,6 +72,15 @@ function updateGUI() {
     for (let i = 0; i < 5; i++) {
         let g = generators[i];
         document.getElementById("gen" + i).innerHTML = "Amount: " + g.amount + "<br>Bought: " + g.bought + "<br>Mult: " + format(g.mult) + "x<br>Cost: " + format(g.cost);
+        if (!automators[i].isBought) {
+            document.getElementById("auto" + i).innerHTML = "Requires: " + automators[i].cost + "<br>" + (i + 1) + " Golems"
+        } else {
+            if (automators[i].isOn) {
+                document.getElementById("auto" + i).textContent = "Golem " + (i + 1) + " automator: On"
+            } else {
+                document.getElementById("auto" + i).textContent = "Golem " + (i + 1) + " automator: Off"
+            }
+        }
     }
 }
 
@@ -99,14 +108,8 @@ function toggleAuto(index) {
     a = automators[index]
     if (a.isBought) {
         a.isOn = !a.isOn
-        if (a.isOn) {
-            document.getElementById("auto" + index).textContent = "Golem " + (index + 1) + " automator: On"
-        } else {
-            document.getElementById("auto" + index).textContent = "Golem " + (index + 1) + " automator: Off"
-        }
     } else {
         if (a.cost > generators[index].amount) return
-        generators[index].amount -= a.cost - 1
         a.isOn = !a.isOn
         a.isBought = true
         document.getElementById("auto" + index).textContent = "Golem " + (index + 1) + " automator: On"
