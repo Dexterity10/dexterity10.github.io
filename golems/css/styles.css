@@ -11,25 +11,25 @@
 
 #secondRow {
     display: flex;
-    width: 1000px;
-    margin: auto;
-    text-align: right;
+    justify-content: space-evenly;
 }
 
 #cap,
 #perSecond {
     text-align: center;
-    width: 150px;
+    width: 200px;
     padding: 15px;
     font-size: 1.3em;
     cursor: pointer;
+    background-color: red;
 }
 
 .generators-container {
     display: flex;
     width: 1080px;
-    flex-wrap: wrap;
     margin: auto;
+    flex-wrap: wrap;
+    text-align: center;
 }
 
 .generator,
@@ -43,12 +43,13 @@
     margin: 8px;
     font-size: 1.3em;
     cursor: pointer;
+    user-select: none;
 }
 
-.autoOn {
-    background-color: lightgreen;
+.active {
+    background-color: rgb(120, 194, 120);
 }
 
-.autoOff {
-    background-color: coral;
+.inactive {
+    background-color: rgb(207, 102, 84);
 }

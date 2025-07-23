@@ -1,23 +1,9 @@
-class Golem {
-    constructor(name, inc, cost) {
-        this.name = name
-        this.inc = inc
-        this.cost = cost
-        this.mult = 1
-        this.xmult = 1
-        this.powmult = 1
-    }
-
-    getInc = () => inc;
-    getCost = () => cost;
-}
-
-var currency = 90
+var currency = 30
 var generators = []
 var automators = []
 var lastUpdate = Date.now()
-var maxcap = 21
-var totalAmount = 0
+var maxGenerators = 21
+var totalGenerators = 0
 
 for (let i = 0; i < 5; i++) {
     let generator = {
@@ -39,35 +25,43 @@ generators[0].cost = 30;
 function format(amount) {
     let power = Math.floor(Math.log10(amount));
     let mantissa = amount / Math.pow(10, power);
-    if (power < 3) return amount.toFixed(2);
+    if (power < 3) return amount.toFixed(0);
     return mantissa.toFixed(2) + "e" + power;
 }
 
 function buyGenerator(index) {
     let g = generators[index]
     if (index == 0) {
-        if (g.cost > currency || totalAmount == maxcap) return
-        currency -= g.cost
-        g.amount++
-        g.bought++
+        if (g.cost > currency || totalGenerators == maxGenerators) return
+        if (automators[index].isOn) {
+            let toAdd = Math.min(Math.floor(currency / 30), maxGenerators - totalGenerators)
+            currency %= 30
+        } else {
+            currency -= g.cost
+            toAdd = 1
+        }
+        g.amount += toAdd
+        g.bought += toAdd
     }
     else {
-        if (generators[index - 1].amount < 3) return
+        if (generators[index - 1].amount < 3) return false
         generators[index - 1].amount -= g.cost
         g.amount++
         g.bought++
     }
-
     let sum = 0
     for (let i = 0; i < 5; i++) {
         sum += generators[i].amount
     }
-    totalAmount = sum
+    totalGenerators = sum
+    return true
 }
 
 function updateGUI() {
-    document.getElementById("firstRow").textContent = format(currency) + " Stones";
-    document.getElementById("cap").textContent = totalAmount + "/" + maxcap;
+    var visibleCurrency = Math.floor(currency)
+    console.log(visibleCurrency)
+    document.getElementById("firstRow").textContent = format(visibleCurrency) + " Stones";
+    document.getElementById("cap").textContent = totalGenerators + "/" + maxGenerators;
     document.getElementById("perSecond").textContent = getProduction() + " Stone /s";
     for (let i = 0; i < 5; i++) {
         let g = generators[i];
@@ -77,12 +71,12 @@ function updateGUI() {
         } else {
             if (automators[i].isOn) {
                 document.getElementById("auto" + i).textContent = "Autobuy: On"
-                document.getElementById("auto" + i).classList.add('autoOn');
-                document.getElementById("auto" + i).classList.remove('autoOff');
+                document.getElementById("auto" + i).classList.add('active');
+                document.getElementById("auto" + i).classList.remove('inactive');
             } else {
                 document.getElementById("auto" + i).textContent = "Autobuy: Off"
-                document.getElementById("auto" + i).classList.add('autoOff');
-                document.getElementById("auto" + i).classList.remove('autoOn');
+                document.getElementById("auto" + i).classList.add('inactive');
+                document.getElementById("auto" + i).classList.remove('active');
             }
         }
     }
@@ -107,6 +101,7 @@ function automationLoop() {
         }
     }
 }
+
 function toggleAuto(index) {
     a = automators[index]
     if (a.isBought) {
@@ -124,8 +119,8 @@ function mainLoop(diff) {
     var diff = (Date.now() - lastUpdate) / 1000;
 
     productionLoop(diff)
-    updateGUI()
     automationLoop()
+    updateGUI()
 
     lastUpdate = Date.now()
 }

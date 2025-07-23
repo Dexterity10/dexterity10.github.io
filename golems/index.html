@@ -1,0 +1,32 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golems Incremental</title>
+</head>
+
+<body>
+    <div id="full">
+        <div id="currency-container">
+
+        </div>
+        <div id="stoneGolem-container">
+            <div class="generator stone-generator" v-for="golem in player.stone">
+                {{ golem.cost }}
+            </div>
+        </div>
+        <div id="metalGolem-container">
+
+        </div>
+        <div id="gemGolem-container">
+
+        </div>
+
+    </div>
+</body>
+<script src="js/vue.js"></script>
+<script src="js/player.js"></script>
+<script src="js/main.js"></script>
+
+</html>
