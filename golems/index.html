@@ -1,26 +1,36 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Golems Incremental</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
     <div id="full">
         <div id="currency-container">
-
-        </div>
-        <div id="stoneGolem-container">
-            <div class="generator stone-generator" v-for="golem in player.stone">
-                {{ golem.cost }}
+            <div id="stone-currency">
+                {{format(player.currency[0])}} Stones
+            </div>
+            <div id="metal-currency">
+                {{format(player.currency[1])}} Metals
+            </div>
+            <div id="gem-currency">
+                {{format(player.currency[2])}} Gems
             </div>
         </div>
-        <div id="metalGolem-container">
-
-        </div>
-        <div id="gemGolem-container">
-
+        <div id="golems-container" v-for="(golem,i) in player.golems">
+            <div class="golems" id="stone-generator" v-for="(golem,j) in golem">
+                <h4>{{golem.name}}</h4>
+                <button @:click="buy(i,j)"> Buy </button>
+                <span>{{golem.amount}} ({{golem.bought}})</span>
+                <span>Cost: {{golem.cost}}</span>
+                <span>X{{golem.mult}}</span>
+            </div>
+            <div class="golems">{{ totalGolems[i]}} / 20</div>
+            <div></div>
         </div>
 
     </div>

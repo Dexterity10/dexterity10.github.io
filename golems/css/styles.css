@@ -1,55 +1,39 @@
-* {
-    box-sizing: border-box;
-}
-
-
-#firstRow {
-    margin: 40px;
-    font-size: 3em;
-    text-align: center;
-}
-
-#secondRow {
-    display: flex;
-    justify-content: space-evenly;
-}
-
-#cap,
-#perSecond {
-    text-align: center;
-    width: 200px;
-    padding: 15px;
-    font-size: 1.3em;
-    cursor: pointer;
-    background-color: red;
-}
-
-.generators-container {
-    display: flex;
-    width: 1080px;
+#full {
+    width: 1000px;
     margin: auto;
-    flex-wrap: wrap;
-    text-align: center;
 }
 
-.generator,
-.automator {
+#currency-container,
+#golems-container {
     display: flex;
-    border: 2px solid khaki;
-    background-color: beige;
+    justify-content: space-between;
+}
+
+#stone-currency,
+#metal-currency,
+#gem-currency {
+    width: 300px;
+    border: 1px solid black;
     text-align: center;
-    width: 200px;
-    padding: 15px;
-    margin: 8px;
-    font-size: 1.3em;
-    cursor: pointer;
-    user-select: none;
+    padding: 40px;
 }
 
-.active {
-    background-color: rgb(120, 194, 120);
+#golems-container {
+    /* display: inline-grid; */
+    margin-top: 40px;
 }
 
-.inactive {
-    background-color: rgb(207, 102, 84);
+#stone-generator,
+#metal-generator,
+#gem-generator {
+    display: inline;
+}
+
+.golems {
+    border: 1px solid black;
+    width: 300px;
+}
+
+.golems span {
+    display: block;
 }

@@ -115,7 +115,7 @@ function toggleAuto(index) {
     }
 }
 
-function mainLoop(diff) {
+function mainLoop() {
     var diff = (Date.now() - lastUpdate) / 1000;
 
     productionLoop(diff)
