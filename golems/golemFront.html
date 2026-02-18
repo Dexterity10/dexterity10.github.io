@@ -1,42 +1,758 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golems Incremental</title>
-    <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Golem Inc</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.prod.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #080808;
+      background-image:
+        radial-gradient(ellipse at 20% 0%, rgba(168,149,106,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 100%, rgba(155,111,191,0.06) 0%, transparent 60%),
+        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px),
+        repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
+      min-height: 100vh;
+      font-family: 'Share Tech Mono', monospace;
+      color: #c8bfaf;
+    }
+
+    /* ── Title Bar ── */
+    .title-bar {
+      background: linear-gradient(180deg, #1a1612 0%, #0f0d0b 100%);
+      border-bottom: 1px solid rgba(168,149,106,0.25);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.6);
+      position: relative; overflow: hidden;
+    }
+    .title-bar::before {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(90deg, transparent 0px, transparent 3px, rgba(168,149,106,0.025) 3px, rgba(168,149,106,0.025) 4px);
+      pointer-events: none;
+    }
+    .game-title {
+      font-family: 'Cinzel Decorative', serif; font-weight: 900;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      background: linear-gradient(135deg, #c9a96e 0%, #f0d898 45%, #b8842a 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      filter: drop-shadow(0 0 12px rgba(212,180,131,0.4));
+    }
+
+    /* ── Currency Chips ── */
+    .currency-chip { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; }
+    .stone-curr { border-color: rgba(168,149,106,0.4) !important; box-shadow: 0 0 10px rgba(168,149,106,0.1) inset; }
+    .metal-curr { border-color: rgba(122,179,200,0.4) !important; box-shadow: 0 0 10px rgba(122,179,200,0.1) inset; }
+    .gem-curr   { border-color: rgba(155,111,191,0.4) !important; box-shadow: 0 0 10px rgba(155,111,191,0.1) inset; }
+
+    /* ── Nav ── */
+    .nav-bar { background: #0e0d0c; border-bottom: 1px solid rgba(255,255,255,0.07); display:flex; }
+    .nav-tab {
+      font-family: 'Cinzel', serif; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 14px 40px; cursor: pointer; color: #6b6560; transition: all 0.25s;
+      border: none; border-bottom: 2px solid transparent; background: none; outline: none;
+    }
+    .nav-tab:hover { color: #a09080; }
+    .nav-tab.active-stone { color: #d4b483; border-bottom-color: #a8956a; text-shadow: 0 0 14px rgba(212,180,131,0.5); background: linear-gradient(180deg,transparent,rgba(168,149,106,0.06)); }
+    .nav-tab.active-metal { color: #a8d4e8; border-bottom-color: #7ab3c8; text-shadow: 0 0 14px rgba(168,212,232,0.5); background: linear-gradient(180deg,transparent,rgba(122,179,200,0.06)); }
+    .nav-tab.active-gem   { color: #c49ae0; border-bottom-color: #9b6fbf; text-shadow: 0 0 14px rgba(196,154,224,0.5); background: linear-gradient(180deg,transparent,rgba(155,111,191,0.06)); }
+
+    /* ── Golem Cards ── */
+    .golem-card {
+      background: linear-gradient(135deg, #141210 0%, #0e0d0b 100%);
+      border: 1px solid rgba(255,255,255,0.06); border-radius: 10px;
+      position: relative; overflow: hidden; transition: all 0.3s;
+    }
+    .golem-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:1px;
+      background: linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);
+    }
+    .stone-card { border-color: rgba(168,149,106,0.18); }
+    .stone-card:hover:not(.locked) { border-color: rgba(168,149,106,0.4); box-shadow: 0 0 24px rgba(168,149,106,0.1); }
+    .metal-card { border-color: rgba(122,179,200,0.18); }
+    .metal-card:hover:not(.locked) { border-color: rgba(122,179,200,0.4); box-shadow: 0 0 24px rgba(122,179,200,0.1); }
+    .gem-card   { border-color: rgba(155,111,191,0.18); }
+    .gem-card:hover:not(.locked)   { border-color: rgba(155,111,191,0.4); box-shadow: 0 0 24px rgba(155,111,191,0.1); }
+    .golem-card.locked { opacity: 0.45; filter: grayscale(0.6); }
+
+    /* Active automation glow */
+    .auto-active.stone-card { box-shadow: 0 0 16px rgba(168,149,106,0.18); border-color: rgba(168,149,106,0.35); }
+    .auto-active.metal-card { box-shadow: 0 0 16px rgba(122,179,200,0.18); border-color: rgba(122,179,200,0.35); }
+    .auto-active.gem-card   { box-shadow: 0 0 16px rgba(155,111,191,0.18); border-color: rgba(155,111,191,0.35); }
+
+    /* ── Cap meter ── */
+    .cap-meter {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; border-radius: 8px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 16px;
+    }
+    .cap-bar-wrap { flex:1; height:6px; background:rgba(255,255,255,0.07); border-radius:3px; overflow:hidden; }
+    .cap-bar-fill { height:100%; border-radius:3px; transition:width 0.3s; }
+    .cap-bar-fill.full { background: #c0392b !important; }
+    .cap-full-chip {
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 20px;
+      background: rgba(192,57,43,0.15); color: #e07060;
+      border: 1px solid rgba(192,57,43,0.35); white-space: nowrap;
+    }
+
+    /* ── Icons ── */
+    .golem-icon {
+      width:64px; height:64px; border-radius:8px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:2rem; flex-shrink:0;
+    }
+    .stone-icon { background: rgba(168,149,106,0.12); border: 1px solid rgba(168,149,106,0.3); }
+    .metal-icon { background: rgba(122,179,200,0.12); border: 1px solid rgba(122,179,200,0.3); }
+    .gem-icon   { background: rgba(155,111,191,0.12); border: 1px solid rgba(155,111,191,0.3); }
+
+    /* ── Text ── */
+    .golem-name { font-family:'Cinzel',serif; font-weight:600; font-size:1rem; letter-spacing:0.06em; }
+    .stone-name { color: #d4b483; }
+    .metal-name { color: #a8d4e8; }
+    .gem-name   { color: #c49ae0; }
+    .stat-label { font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:#484038; margin-bottom:2px; }
+    .stat-value { font-family:'Share Tech Mono',monospace; font-size:0.85rem; }
+    .stone-stat { color: #c0a060; }
+    .metal-stat { color: #7ab3c8; }
+    .gem-stat   { color: #9b6fbf; }
+
+    /* ── Buy button ── */
+    .buy-btn {
+      font-family:'Cinzel',serif; font-weight:600; font-size:0.75rem;
+      letter-spacing:0.1em; text-transform:uppercase;
+      padding:10px 22px; border-radius:6px;
+      cursor:pointer; border:none; outline:none;
+      transition:all 0.2s; white-space:nowrap; line-height:1.4;
+    }
+    .stone-btn { background:linear-gradient(135deg,#6b4e1f,#4a3310); color:#f0d898; border:1px solid rgba(168,149,106,0.5); box-shadow:0 2px 8px rgba(0,0,0,0.4); }
+    .stone-btn:hover:not(:disabled) { background:linear-gradient(135deg,#8a6425,#5c4018); box-shadow:0 4px 16px rgba(168,149,106,0.25); transform:translateY(-1px); }
+    .metal-btn { background:linear-gradient(135deg,#1a3d52,#0d2535); color:#c8e8f4; border:1px solid rgba(122,179,200,0.5); box-shadow:0 2px 8px rgba(0,0,0,0.4); }
+    .metal-btn:hover:not(:disabled) { background:linear-gradient(135deg,#214d66,#122f42); box-shadow:0 4px 16px rgba(122,179,200,0.25); transform:translateY(-1px); }
+    .gem-btn   { background:linear-gradient(135deg,#3d1a5c,#240d38); color:#e0c4f8; border:1px solid rgba(155,111,191,0.5); box-shadow:0 2px 8px rgba(0,0,0,0.4); }
+    .gem-btn:hover:not(:disabled)   { background:linear-gradient(135deg,#4e2275,#2f1048); box-shadow:0 4px 16px rgba(155,111,191,0.25); transform:translateY(-1px); }
+    .buy-btn:disabled { opacity:0.28; cursor:not-allowed; transform:none !important; }
+    .buy-btn:active:not(:disabled) { transform:translateY(0); }
+
+    /* ── Automation panel ── */
+    .auto-panel {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 7px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.05);
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .auto-panel-label {
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #4a4038;
+      white-space: nowrap;
+    }
+
+    /* Buy-automation button */
+    .auto-buy-btn {
+      font-family:'Cinzel',serif; font-weight:600; font-size:0.65rem;
+      letter-spacing:0.08em; text-transform:uppercase;
+      padding:6px 14px; border-radius:5px;
+      cursor:pointer; border:none; outline:none;
+      transition:all 0.2s; white-space:nowrap;
+    }
+    .stone-auto-buy { background:linear-gradient(135deg,#3a2a10,#251a08); color:#c9a060; border:1px solid rgba(168,149,106,0.3); }
+    .stone-auto-buy:hover:not(:disabled) { background:linear-gradient(135deg,#4a3518,#30220e); transform:translateY(-1px); }
+    .metal-auto-buy { background:linear-gradient(135deg,#0e2030,#081520); color:#78b0c8; border:1px solid rgba(122,179,200,0.3); }
+    .metal-auto-buy:hover:not(:disabled) { background:linear-gradient(135deg,#142840,#0c1e2e); transform:translateY(-1px); }
+    .gem-auto-buy   { background:linear-gradient(135deg,#220e38,#160824); color:#b080d8; border:1px solid rgba(155,111,191,0.3); }
+    .gem-auto-buy:hover:not(:disabled)   { background:linear-gradient(135deg,#2c1248,#1c0a30); transform:translateY(-1px); }
+    .auto-buy-btn:disabled { opacity:0.3; cursor:not-allowed; transform:none !important; }
+
+    /* ── Toggle Switch ── */
+    .toggle-wrap { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; }
+    .toggle-track {
+      width: 36px; height: 20px; border-radius: 10px;
+      position: relative; transition: all 0.25s;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      flex-shrink: 0;
+    }
+    .toggle-track.on-stone { background: rgba(168,149,106,0.35); border-color: rgba(168,149,106,0.6); box-shadow: 0 0 8px rgba(168,149,106,0.3); }
+    .toggle-track.on-metal { background: rgba(122,179,200,0.35); border-color: rgba(122,179,200,0.6); box-shadow: 0 0 8px rgba(122,179,200,0.3); }
+    .toggle-track.on-gem   { background: rgba(155,111,191,0.35); border-color: rgba(155,111,191,0.6); box-shadow: 0 0 8px rgba(155,111,191,0.3); }
+    .toggle-thumb {
+      position: absolute; top: 2px; width: 14px; height: 14px; border-radius: 50%;
+      background: #888; transition: all 0.25s; left: 2px;
+    }
+    .toggle-thumb.on { left: 18px; background: #f0f0f0; }
+    .toggle-label { font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: #555; transition: color 0.2s; white-space: nowrap; }
+    .toggle-label.on-stone { color: #c0a060; }
+    .toggle-label.on-metal { color: #7ab3c8; }
+    .toggle-label.on-gem   { color: #9b6fbf; }
+
+    /* Auto pulse dot */
+    @keyframes autoPulse {
+      0%, 100% { opacity: 0.4; transform: scale(0.85); }
+      50%       { opacity: 1;   transform: scale(1.15); }
+    }
+    .auto-dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+      animation: autoPulse 1.2s ease-in-out infinite;
+    }
+    .auto-dot.stone { background: #c0a060; }
+    .auto-dot.metal { background: #7ab3c8; }
+    .auto-dot.gem   { background: #9b6fbf; }
+
+    /* ── Owned badge ── */
+    .owned-badge {
+      width:48px; height:48px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Share Tech Mono'; font-size:1.05rem; font-weight:bold;
+      background: rgba(255,255,255,0.04);
+    }
+    .stone-badge { border:1px solid rgba(168,149,106,0.35); color:#d4b483; }
+    .metal-badge { border:1px solid rgba(122,179,200,0.35); color:#a8d4e8; }
+    .gem-badge   { border:1px solid rgba(155,111,191,0.35); color:#c49ae0; }
+
+    /* ── Multiplier badge ── */
+    .mult-badge { font-size:0.7rem; padding:3px 8px; border-radius:4px; font-family:'Share Tech Mono'; letter-spacing:0.05em; }
+    .stone-mult { background:rgba(168,149,106,0.15); color:#d4b483; border:1px solid rgba(168,149,106,0.25); }
+    .metal-mult { background:rgba(122,179,200,0.15); color:#a8d4e8; border:1px solid rgba(122,179,200,0.25); }
+    .gem-mult   { background:rgba(155,111,191,0.15); color:#c49ae0; border:1px solid rgba(155,111,191,0.25); }
+
+    /* ── Ornament ── */
+    .ornament { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+    .ornament-line { flex:1; height:1px; }
+    .stone-ol     { background: linear-gradient(90deg,transparent,rgba(168,149,106,0.35)); }
+    .stone-ol.rev { background: linear-gradient(270deg,transparent,rgba(168,149,106,0.35)); }
+    .metal-ol     { background: linear-gradient(90deg,transparent,rgba(122,179,200,0.35)); }
+    .metal-ol.rev { background: linear-gradient(270deg,transparent,rgba(122,179,200,0.35)); }
+    .gem-ol       { background: linear-gradient(90deg,transparent,rgba(155,111,191,0.35)); }
+    .gem-ol.rev   { background: linear-gradient(270deg,transparent,rgba(155,111,191,0.35)); }
+
+    /* ── Progress bars ── */
+    .prog-wrap { margin-top:10px; height:3px; background:rgba(255,255,255,0.05); border-radius:2px; overflow:hidden; }
+    .prog-fill { height:100%; border-radius:2px; transition:width 0.4s; }
+
+    /* ── Particles ── */
+    @keyframes floatUp {
+      0%   { opacity:1; transform:translateY(0) scale(1); }
+      100% { opacity:0; transform:translateY(-64px) scale(0.5); }
+    }
+    .float-particle { position:fixed; pointer-events:none; font-size:1.2rem; animation:floatUp 0.8s ease-out forwards; z-index:9999; }
+
+    .vdivider { width:1px; height:24px; background:rgba(255,255,255,0.08); flex-shrink:0; }
+
+    /* Unlock banner slide-in */
+    @keyframes slideIn {
+      from { opacity:0; transform: translateY(-12px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    .unlock-banner { animation: slideIn 0.4s ease; }
+  </style>
 </head>
-
 <body>
-    <div id="full">
-        <div id="currency-container">
-            <div id="stone-currency">
-                {{format(player.currency[0])}} Stones
-            </div>
-            <div id="metal-currency">
-                {{format(player.currency[1])}} Metals
-            </div>
-            <div id="gem-currency">
-                {{format(player.currency[2])}} Gems
-            </div>
-        </div>
-        <div id="golems-container" v-for="(golem,i) in player.golems">
-            <div class="golems" id="stone-generator" v-for="(golem,j) in golem">
-                <h4>{{golem.name}}</h4>
-                <button @:click="buy(i,j)"> Buy </button>
-                <span>{{golem.amount}} ({{golem.bought}})</span>
-                <span>Cost: {{golem.cost}}</span>
-                <span>X{{golem.mult}}</span>
-            </div>
-            <div class="golems">{{ totalGolems[i]}} / 20</div>
-            <div></div>
-        </div>
+<div id="app">
 
+  <!-- ══ TITLE BAR ══ -->
+  <div class="title-bar" style="padding:1rem 1.5rem;">
+    <div style="max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <span style="font-size:2rem;filter:drop-shadow(0 0 12px rgba(212,180,131,0.6))">⚙️</span>
+        <h1 class="game-title" style="font-size:2rem;">Golem Inc</h1>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+        <div class="currency-chip stone-curr" style="padding:0.5rem 1rem;display:flex;align-items:center;gap:0.5rem;">
+          <span>🪨</span>
+          <div>
+            <div class="stat-label" style="color:#7a6840;">Stone</div>
+            <div class="stone-stat" style="font-size:1rem;">{{ formatNum(currency.stone) }}</div>
+          </div>
+        </div>
+        <div class="currency-chip metal-curr" style="padding:0.5rem 1rem;display:flex;align-items:center;gap:0.5rem;">
+          <span>⚙️</span>
+          <div>
+            <div class="stat-label" style="color:#3a6070;">Metal</div>
+            <div class="metal-stat" style="font-size:1rem;">{{ formatNum(currency.metal) }}</div>
+          </div>
+        </div>
+        <div class="currency-chip gem-curr" style="padding:0.5rem 1rem;display:flex;align-items:center;gap:0.5rem;">
+          <span>💎</span>
+          <div>
+            <div class="stat-label" style="color:#5a3075;">Gem</div>
+            <div class="gem-stat" style="font-size:1rem;">{{ formatNum(currency.gem) }}</div>
+          </div>
+        </div>
+      </div>
     </div>
-</body>
-<script src="js/vue.js"></script>
-<script src="js/player.js"></script>
-<script src="js/main.js"></script>
+  </div>
 
+  <!-- ══ NAV BAR ══ -->
+  <div class="nav-bar">
+    <button v-for="tab in tabs" :key="tab.id"
+      class="nav-tab"
+      :class="activeTab === tab.id ? 'active-' + tab.id : ''"
+      @click="activeTab = tab.id">
+      {{ tab.icon }} {{ tab.label }}
+    </button>
+  </div>
+
+  <!-- ══ CONTENT ══ -->
+  <div style="max-width:960px;margin:0 auto;padding:2rem 1rem;">
+    <div v-for="tab in tabs" :key="tab.id" v-show="activeTab === tab.id">
+
+      <!-- Section header -->
+      <div class="ornament">
+        <div class="ornament-line" :class="tab.id + '-ol'"></div>
+        <span :class="tab.id + '-name'" style="font-family:'Cinzel',serif;letter-spacing:0.15em;text-transform:uppercase;font-size:0.78rem;">
+          {{ tab.icon }} {{ tab.label }} Golems
+        </span>
+        <div class="ornament-line rev" :class="tab.id + '-ol rev'"></div>
+      </div>
+
+      <!-- ── LOCKED STATE ── -->
+      <div v-if="!unlocked[tab.id]" class="golem-card locked" :class="tab.id + '-card'" style="padding:2rem;text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">🔒</div>
+        <div class="golem-name" :class="tab.id + '-name'" style="margin-bottom:0.5rem;">{{ tab.label }} Golems Locked</div>
+        <div style="font-size:0.8rem;color:#555;margin-bottom:1.25rem;">
+          Accumulate <span :class="prevTabColor(tab.id)">5,000 {{ tab.id === 'metal' ? '🪨 Stone' : '⚙️ Metal' }}</span> to unlock.
+          You will receive one free {{ tab.label }} Golem 1 upon unlocking.
+        </div>
+        <div style="max-width:320px;margin:0 auto;">
+          <div style="display:flex;justify-content:space-between;font-size:0.72rem;margin-bottom:5px;">
+            <span :class="prevTabColor(tab.id)">{{ formatNum(tab.id === 'metal' ? currency.stone : currency.metal) }} / 5,000</span>
+            <span style="color:#3a3530;">{{ Math.min(100, Math.floor(((tab.id === 'metal' ? currency.stone : currency.metal) / 5000) * 100)) }}%</span>
+          </div>
+          <div style="height:7px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;">
+            <div :style="{
+              width: Math.min(100, ((tab.id === 'metal' ? currency.stone : currency.metal) / 5000) * 100) + '%',
+              height:'100%', borderRadius:'4px', transition:'width 0.4s',
+              background: tab.id === 'metal' ? '#a8956a' : '#7ab3c8'
+            }"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── UNLOCKED TAB CONTENT ── -->
+      <template v-if="unlocked[tab.id]">
+
+        <!-- Cap meter -->
+        <div class="cap-meter">
+          <span style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:#484038;white-space:nowrap;">Golems Active</span>
+          <div class="cap-bar-wrap">
+            <div class="cap-bar-fill"
+              :class="{ full: totalOwned(tab.id) >= GOLEM_CAP }"
+              :style="{
+                width: (totalOwned(tab.id) / GOLEM_CAP * 100) + '%',
+                background: totalOwned(tab.id) >= GOLEM_CAP ? '' : colors[tab.id]
+              }"></div>
+          </div>
+          <span :style="{ color: totalOwned(tab.id) >= GOLEM_CAP ? '#e07060' : colors[tab.id], fontSize:'0.8rem', fontFamily:'Share Tech Mono', whiteSpace:'nowrap' }">
+            {{ totalOwned(tab.id) }} / {{ GOLEM_CAP }}
+          </span>
+          <span v-if="totalOwned(tab.id) >= GOLEM_CAP" class="cap-full-chip">Cap Reached</span>
+        </div>
+
+        <!-- Golem rows -->
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div v-for="(golem, idx) in golems[tab.id]" :key="golem.id"
+            class="golem-card" :class="[tab.id + '-card', automation[tab.id][idx].on ? 'auto-active' : '']"
+            style="padding:1.25rem;">
+
+            <!-- ── Main row ── -->
+            <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+
+              <!-- Icon -->
+              <div class="golem-icon" :class="tab.id + '-icon'" style="position:relative;">
+                {{ golem.icon }}
+                <!-- Pulse dot when automating -->
+                <div v-if="automation[tab.id][idx].on"
+                  class="auto-dot" :class="tab.id"
+                  style="position:absolute;bottom:4px;right:4px;"></div>
+              </div>
+
+              <!-- Details -->
+              <div style="flex:1;min-width:0;">
+                <div class="golem-name" :class="tab.id + '-name'" style="margin-bottom:0.5rem;">{{ golem.name }}</div>
+                <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+
+                  <div>
+                    <div class="stat-label">Cost</div>
+                    <div class="stat-value" :class="tab.id + '-stat'">
+                      <template v-if="idx === 0">10 {{ tab.currSymbol }}</template>
+                      <template v-else>3× {{ golems[tab.id][idx-1].name }}</template>
+                    </div>
+                  </div>
+
+                  <div class="vdivider"></div>
+
+                  <div>
+                    <div class="stat-label">Multiplier</div>
+                    <span class="mult-badge" :class="tab.id + '-mult'">×{{ golem.multiplier }}</span>
+                  </div>
+
+                  <div class="vdivider"></div>
+
+                  <div>
+                    <div class="stat-label">Generates / sec</div>
+                    <div class="stat-value" :class="tab.id + '-stat'">{{ golem.multiplier }} {{ tab.currSymbol }}</div>
+                  </div>
+
+                  <template v-if="golem.bought > 0">
+                    <div class="vdivider"></div>
+                    <div>
+                      <div class="stat-label">Total Output</div>
+                      <div class="stat-value" :class="tab.id + '-stat'">{{ formatNum(golem.bought * golem.multiplier) }}/s</div>
+                    </div>
+                  </template>
+
+                </div>
+              </div>
+
+              <!-- Owned + Buy -->
+              <div style="display:flex;align-items:center;gap:1rem;flex-shrink:0;">
+                <div style="text-align:center;">
+                  <div class="stat-label" style="margin-bottom:4px;">Owned</div>
+                  <div class="owned-badge" :class="tab.id + '-badge'">{{ golem.bought }}</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+                  <button class="buy-btn" :class="tab.id + '-btn'"
+                    :disabled="!canAfford(tab.id, idx)"
+                    @click="buyGolem(tab.id, idx, $event)">
+                    Buy
+                  </button>
+                  <div v-if="!canAfford(tab.id, idx)" style="font-size:0.58rem;color:#4a4038;text-align:center;max-width:80px;line-height:1.3;">
+                    <template v-if="idx === 0 && totalOwned(tab.id) >= GOLEM_CAP">Cap full</template>
+                    <template v-else-if="idx === 0">Need {{ golem.baseCost }} {{ tab.label }}</template>
+                    <template v-else>Need 3× G{{ idx }}</template>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Automation panel ── -->
+            <div class="auto-panel">
+              <span class="auto-panel-label">Automation</span>
+
+              <!-- Not purchased yet: show buy button -->
+              <template v-if="!automation[tab.id][idx].purchased">
+                <button class="auto-buy-btn" :class="tab.id + '-auto-buy'"
+                  :disabled="currency[tab.id] < automationCost(idx)"
+                  @click="purchaseAutomation(tab.id, idx, $event)">
+                  Unlock Auto · {{ formatNum(automationCost(idx)) }} {{ tab.currSymbol }}
+                </button>
+                <div style="flex:1;"></div>
+                <!-- Progress toward auto cost -->
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div style="width:80px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;">
+                    <div :style="{
+                      width: Math.min(100, (currency[tab.id] / automationCost(idx)) * 100) + '%',
+                      height:'100%', borderRadius:'2px',
+                      background: colors[tab.id], transition:'width 0.4s'
+                    }"></div>
+                  </div>
+                  <span style="font-size:0.62rem;color:#484038;">{{ Math.min(100, Math.floor((currency[tab.id] / automationCost(idx)) * 100)) }}%</span>
+                </div>
+              </template>
+
+              <!-- Purchased: show toggle -->
+              <template v-else>
+                <div class="toggle-wrap" @click="toggleAutomation(tab.id, idx)">
+                  <div class="toggle-track" :class="automation[tab.id][idx].on ? 'on-' + tab.id : ''">
+                    <div class="toggle-thumb" :class="automation[tab.id][idx].on ? 'on' : ''"></div>
+                  </div>
+                  <span class="toggle-label" :class="automation[tab.id][idx].on ? 'on-' + tab.id : ''">
+                    {{ automation[tab.id][idx].on ? 'Auto: ON' : 'Auto: OFF' }}
+                  </span>
+                </div>
+                <div v-if="automation[tab.id][idx].on" style="display:flex;align-items:center;gap:6px;margin-left:4px;">
+                  <div class="auto-dot" :class="tab.id"></div>
+                  <span style="font-size:0.62rem;color:#484038;">Buying when able · 1×/sec</span>
+                </div>
+                <div style="flex:1;"></div>
+                <span style="font-size:0.62rem;color:#3a3530;letter-spacing:0.06em;">PURCHASED</span>
+              </template>
+            </div>
+
+            <!-- Affordability progress bar -->
+            <div class="prog-wrap">
+              <div class="prog-fill" :style="{ width: Math.min(100, getProgress(tab.id, idx)) + '%', background: colors[tab.id] }"></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Income footer -->
+        <div style="margin-top:1.5rem;text-align:center;font-size:0.7rem;letter-spacing:0.08em;color:#302c28;">
+          TOTAL {{ tab.label.toUpperCase() }} INCOME:
+          <span :class="tab.id + '-stat'">{{ formatNum(totalIncome(tab.id)) }}/s</span>
+        </div>
+
+      </template>
+    </div>
+  </div>
+</div>
+
+<script>
+const { createApp, ref, reactive, onMounted, onUnmounted } = Vue;
+
+createApp({
+  setup() {
+    const activeTab = ref('stone');
+    const GOLEM_CAP = 20;
+
+    const tabs = [
+      { id: 'stone', label: 'Stone', icon: '🪨', currSymbol: '🪨' },
+      { id: 'metal', label: 'Metal', icon: '⚙️', currSymbol: '⚙️' },
+      { id: 'gem',   label: 'Gem',   icon: '💎', currSymbol: '💎' },
+    ];
+
+    const colors = { stone: '#a8956a', metal: '#7ab3c8', gem: '#9b6fbf' };
+
+    const currency = reactive({ stone: 10, metal: 0, gem: 0 });
+
+    /*
+      Golem economy:
+      ─────────────────────────────────────────────────────────
+      All golems generate their own tab's currency.
+      G1: cost 10 currency, mult ×1 → 1/s each
+      G2: cost 3× G1 (consume 3 G1s), mult ×2 → 2/s each
+      G3: cost 3× G2 (consume 3 G2s), mult ×4 → 4/s each
+      CAP: 20 total golems per tab.
+
+      Tab unlock: metal needs 5,000 stone; gem needs 5,000 metal.
+      On unlock: 5,000 prev resource is deducted, and player receives 1 free G1.
+
+      Automation costs: 5^(2 + golemNumber)
+        G1 → 5^3 = 125
+        G2 → 5^4 = 625
+        G3 → 5^5 = 3125
+      Automation paid in the tab's own currency.
+      When toggled ON: once per second, buys as many of that golem as possible.
+    */
+
+    const defs = {
+      stone: [
+        { name: 'Stone Golem 1', icon: '🗿', baseCost: 10, multiplier: 1 },
+        { name: 'Stone Golem 2', icon: '🏔️', baseCost: 3,  multiplier: 2 },
+        { name: 'Stone Golem 3', icon: '🪨', baseCost: 3,  multiplier: 4 },
+        { name: 'Stone Golem 4', icon: '🌋', baseCost: 3,  multiplier: 8 },
+      ],
+      metal: [
+        { name: 'Metal Golem 1', icon: '⚙️', baseCost: 10, multiplier: 1 },
+        { name: 'Metal Golem 2', icon: '🔩', baseCost: 3,  multiplier: 2 },
+        { name: 'Metal Golem 3', icon: '🤖', baseCost: 3,  multiplier: 4 },
+        { name: 'Metal Golem 4', icon: '🦾', baseCost: 3,  multiplier: 8 },
+      ],
+      gem: [
+        { name: 'Gem Golem 1', icon: '💎', baseCost: 10, multiplier: 1 },
+        { name: 'Gem Golem 2', icon: '🔮', baseCost: 3,  multiplier: 2 },
+        { name: 'Gem Golem 3', icon: '✨', baseCost: 3,  multiplier: 4 },
+        { name: 'Gem Golem 4', icon: '🌟', baseCost: 3,  multiplier: 8 },
+      ],
+    };
+
+    const golems = reactive({
+      stone: defs.stone.map(d => ({ ...d, bought: 0 })),
+      metal: defs.metal.map(d => ({ ...d, bought: 0 })),
+      gem:   defs.gem.map(d => ({ ...d, bought: 0 })),
+    });
+
+    const unlocked = reactive({ stone: true, metal: false, gem: false });
+
+    // Automation state per tab × golem
+    // purchased: player has paid the one-time cost
+    // on: toggle is enabled
+    const automation = reactive({
+      stone: [
+        { purchased: false, on: false },
+        { purchased: false, on: false },
+        { purchased: false, on: false },
+        { purchased: false, on: false },
+      ],
+      metal: [
+        { purchased: false, on: false },
+        { purchased: false, on: false },
+        { purchased: false, on: false },
+        { purchased: false, on: false },
+      ],
+      gem: [
+        { purchased: false, on: false },
+        { purchased: false, on: false },
+        { purchased: false, on: false },
+        { purchased: false, on: false },
+      ],
+    });
+
+    /* ── Pure helpers ── */
+
+    function formatNum(n) {
+      n = Math.floor(n);
+      if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';
+      if (n >= 1e6) return (n / 1e6).toFixed(2) + 'M';
+      if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
+      return n.toString();
+    }
+
+    // golemNumber is 1-indexed (G1=1, G2=2, G3=3, G4=4), idx is 0-indexed
+    function automationCost(idx) {
+      return Math.pow(3, 2 + (idx + 1)); // 3^3=27, 3^4=81, 3^5=243, 3^6=729
+    }
+
+    function totalOwned(tabId) {
+      return golems[tabId].reduce((s, g) => s + g.bought, 0);
+    }
+
+    function totalIncome(tabId) {
+      return golems[tabId].reduce((s, g) => s + g.bought * g.multiplier, 0);
+    }
+
+    function prevTabColor(tabId) {
+      return tabId === 'metal' ? 'stone-stat' : 'metal-stat';
+    }
+
+    function canAfford(tabId, idx) {
+      if (!unlocked[tabId]) return false;
+      if (idx === 0) {
+        return totalOwned(tabId) < GOLEM_CAP && currency[tabId] >= golems[tabId][0].baseCost;
+      }
+      return golems[tabId][idx - 1].bought >= 3;
+    }
+
+    function getProgress(tabId, idx) {
+      if (!unlocked[tabId]) return 0;
+      if (idx === 0) {
+        if (totalOwned(tabId) >= GOLEM_CAP) return 100; // full → show full red bar
+        return Math.min(100, (currency[tabId] / golems[tabId][0].baseCost) * 100);
+      }
+      return Math.min(100, (golems[tabId][idx - 1].bought / 3) * 100);
+    }
+
+    /* ── Buy golem (manual) ── */
+    function buyGolem(tabId, idx, event) {
+      if (!canAfford(tabId, idx)) return;
+      _doBuy(tabId, idx);
+      if (event) spawnParticle(event, golems[tabId][idx].icon);
+    }
+
+    /* ── Internal buy without event (used by automation) ── */
+    function _doBy(tabId, idx) {
+      _doBy; // silence linter
+    }
+    function _doBy(tabId, idx) {} // placeholder — using _doActualBuy below
+
+    function _doActualBuy(tabId, idx) {
+      if (idx === 0) {
+        currency[tabId] -= golems[tabId][0].baseCost;
+      } else {
+        golems[tabId][idx - 1].bought -= 3;
+      }
+      golems[tabId][idx].bought++;
+    }
+
+    // Rewrite buyGolem to use shared internal
+    function buyGolem(tabId, idx, event) {
+      if (!canAfford(tabId, idx)) return;
+      _doActualBuy(tabId, idx);
+      if (event) spawnParticle(event, golems[tabId][idx].icon);
+    }
+
+    /* ── Purchase automation ── */
+    function purchaseAutomation(tabId, idx, event) {
+      const cost = automationCost(idx);
+      if (currency[tabId] < cost) return;
+      currency[tabId] -= cost;
+      automation[tabId][idx].purchased = true;
+      if (event) spawnParticle(event, '⚡');
+    }
+
+    function toggleAutomation(tabId, idx) {
+      if (!automation[tabId][idx].purchased) return;
+      automation[tabId][idx].on = !automation[tabId][idx].on;
+    }
+
+    /* ── Spawn particle ── */
+    function spawnParticle(event, icon) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const p = document.createElement('div');
+      p.className = 'float-particle';
+      p.textContent = icon;
+      p.style.left = (rect.left + rect.width / 2 - 12) + 'px';
+      p.style.top  = (rect.top - 10) + 'px';
+      document.body.appendChild(p);
+      p.addEventListener('animationend', () => p.remove());
+    }
+
+    /* ── Unlock a tab: deduct cost, give 1 free G1 ── */
+    function doUnlock(tabId) {
+      const prevCurr = tabId === 'metal' ? 'stone' : 'metal';
+      currency[prevCurr] -= 5000;
+      unlocked[tabId] = true;
+      golems[tabId][0].bought += 1; // free G1 on unlock
+    }
+
+    /* ── Main tick: 100ms ── */
+    const TICK = 0.1;
+    let autoTimer = 0; // accumulates time toward 1-second automation pulse
+
+    function tick() {
+      // Check unlock conditions
+      if (!unlocked.metal && currency.stone >= 5000) doUnlock('metal');
+      if (!unlocked.gem   && currency.metal >= 5000) doUnlock('gem');
+
+      // Income
+      ['stone', 'metal', 'gem'].forEach(mat => {
+        if (!unlocked[mat]) return;
+        const gs = golems[mat];
+        currency[mat] += (
+          gs[0].bought * gs[0].multiplier +
+          gs[1].bought * gs[1].multiplier +
+          gs[2].bought * gs[2].multiplier +
+          gs[3].bought * gs[3].multiplier
+        ) * TICK;
+      });
+
+      // Automation pulse: once per second
+      autoTimer += TICK;
+      if (autoTimer >= 1.0) {
+        autoTimer -= 1.0;
+        runAutomation();
+      }
+    }
+
+    /* ── Automation pulse: buy as many as possible for each enabled golem ── */
+    function runAutomation() {
+      ['stone', 'metal', 'gem'].forEach(mat => {
+        if (!unlocked[mat]) return;
+        golems[mat].forEach((golem, idx) => {
+          if (!automation[mat][idx].on) return;
+          // Buy as many times as possible in one pulse
+          let safety = 200; // prevent infinite loop edge cases
+          while (canAfford(mat, idx) && safety-- > 0) {
+            _doActualBuy(mat, idx);
+          }
+        });
+      });
+    }
+
+    let ticker;
+    onMounted(() => { ticker = setInterval(tick, 100); });
+    onUnmounted(() => clearInterval(ticker));
+
+    return {
+      activeTab, tabs, colors, GOLEM_CAP,
+      currency, golems, unlocked, automation,
+      formatNum, automationCost,
+      totalOwned, totalIncome,
+      prevTabColor,
+      canAfford, getProgress,
+      buyGolem,
+      purchaseAutomation, toggleAutomation,
+    };
+  }
+}).mount('#app');
+</script>
+</body>
 </html>

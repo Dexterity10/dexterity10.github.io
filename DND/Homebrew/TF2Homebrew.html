@@ -1,120 +1,118 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TF2 Homebrew</title>
-    <link rel="stylesheet" href="../DNDStyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-
-<body>
-    <div>
-        <table>
-            <tr>
-                <th>
-                    Content
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <ul>
-                        <li>
-                            Classes
-                            <ul>
-                                <li>
-                                    <a href="#medic">Medic</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            Weapons
-                            <ul>
-                                <li>Fan 'o War</li>
-                            </ul>
-                        </li>
+<body class="bg-gray-900 text-gray-100">
+    <div class="container mx-auto p-4">
+        <div class="bg-gray-800 shadow-lg rounded-lg p-4">
+            <h1 class="text-xl font-bold mb-4">Content</h1>
+            <ul class="list-disc list-inside">
+                <li>
+                    Classes
+                    <ul class="list-disc list-inside pl-4">
+                        <li><a href="#medic" class="text-blue-400 hover:underline">Medic</a></li>
                     </ul>
-                </td>
-            </tr>
+                </li>
+                <li>
+                    Weapons
+                    <ul class="list-disc list-inside pl-4">
+                        <li>Fan 'o War</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <h1 id="medic" class="text-2xl font-bold mt-6 mb-2">Medic</h1>
+        <div class="bg-gray-800 rounded-lg shadow-lg p-4 mb-4">
+            <p>Hit dice: <span class="font-semibold">1d6 per medic level</span></p>
+            <p>Proficiencies: <span class="font-semibold">light armor, medium armor, shields</span></p>
+            <p>Saving throws: <span class="font-semibold">constitution, wisdom</span></p>
+            <p>Skills: <span class="font-semibold">Medicine, Stealth</span></p>
+        </div>
+
+        <h2 class="text-xl font-bold">Primary</h2>
+        <table class="min-w-full bg-gray-800 rounded-lg mb-4 shadow-lg">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2">Blutsauger</th>
+                    <th class="px-4 py-2">Crusader's Crossbow</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="px-4 py-2">
+                        Siphon:<br>
+                        On dealing damage, heal for +con (minimum 1)
+                    </td>
+                    <td class="px-4 py-2">
+                        Fire a bolt (25/50)<br>
+                        Hitting an ally heals for 1d4 + target level, hitting an enemy damages for 1d6 + target CR/level rounding down
+                    </td>
+                </tr>
+            </tbody>
         </table>
+
+        <h2 class="text-xl font-bold">Utility</h2>
+        <p class="mb-4">
+            Patient gains +1 Con saves.<br>
+            Cast "Medibeam" spell for 1 minute. Requires concentration.<br>
+            Heal for 1 HP per turn when healing a patient.
+        </p>
+
+        <table class="min-w-full bg-gray-800 rounded-lg mb-4 shadow-lg">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2">Medigun</th>
+                    <th class="px-4 py-2">Kritzkrieg</th>
+                    <th class="px-4 py-2">Vaccinator</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="px-4 py-2">Medibeam heals for level + con.</td>
+                    <td class="px-4 py-2">Medibeam gives patient's level in additional damage. Critical hits deal triple damage instead of double.</td>
+                    <td class="px-4 py-2">As a bonus action, choose a resistance type other than bludgeoning, slashing, and piercing. Last resistance used carries over until changed.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="text-lg font-bold mt-4">Overheal</h3>
+        <p class="mb-4">Healing a full health patient grants temp HP up to a max of double your level (+con at level 2).</p>
+
+        <h2 class="text-xl font-bold">Melee</h2>
+        <table class="min-w-full bg-gray-800 rounded-lg mb-4 shadow-lg">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2">Amputator</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="px-4 py-2">
+                        <p>Medicating melody:<br>Heals everyone in a 25-foot radius for 1d4.</p>
+                        <p>Swing:<br>Deals 1d4-1 slashing damage.</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="text-xl font-bold">Level Bonuses</h2>
+        <ul class="list-disc list-inside mb-4">
+            <li>2: Overheal cap +2xCon</li>
+            <li>5</li>
+            <li>8</li>
+            <li>11</li>
+            <li>14</li>
+            <li>17</li>
+            <li>20</li>
+        </ul>
     </div>
-    <h1 id="medic">Medic</h1>
-    <div>
-        hit dice: 1d6 per medic level
-        Proficiencies:
-        light armor, medium armor, shields
-        Saving throws: constitution, wisdom
-        skills: Medicine, Stealth
-    </div>
-    <h2>Primary</h2>
-    <table>
-        <tr>
-            <th>Blutsauger</th>
-            <th>Crusader's Crossbow</th>
-        </tr>
-        <tr>
-            <td>Siphon:<br>On dealing damage, heal for +con (minimum 1)</td>
-            <td>Fire a bolt (25/50)<br>Hitting an ally heals for
-                1d4+target level, hitting an enemy damages for 1d6+target cr/level rounding down</td>
-        </tr>
-    </table>
-
-
-    <h2>Utility</h2>
-    <p>
-        Patient gains +1 Con saves<br>
-        Cast "Medibeam" spell for 1 minute. Requires concentration.<br>
-        Additionally, heal for 1hp per turn healing a patient.<br>
-    </p>
-    <table></table>
-    <tr>
-        <th>Medigun</th>
-        <th>Kritzkrieg</th>
-        <th>Vaccinator</th>
-    </tr>
-    <tr>
-        <td>Medibeam heals for lvl + con</td>
-        <td>Medibeam gives patient's level in additional damage. Critical hits deal triple
-            damage instead of double.</td>
-        <td>As a bonus action, choose a resistance type other than bludgeoning, slashing, and
-            piercing. Last resistance used carries over until changed.</td>
-    </tr>
-    </table>
-    <h3>Overheal</h3>
-    Healing a full health patient grants temp hp up to a max of double of lvl (+con at lvl 2)
-
-    <h2>Melee</h2>
-    <table>
-        <tr>
-            <th>
-                Amputator
-            </th>
-        </tr>
-        <tr>
-            <td>
-                <div>
-                    Medicating melody:<br>
-                    Heals everyone in a 25 foot radius for 1d4<br>
-                </div>
-                <div>
-                    Swing:<br>
-                    Deals 1d4-1 slashing damage
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    <h2>Level bonuses</h2>
-    <ul>
-        <li>2<br>
-            Overheal cap +2xCon</li>
-        <li>5</li>
-        <li>8</li>
-        <li>11</li>
-        <li>14</li>
-        <li>17</li>
-        <li>20</li>
-    </ul>
-
 </body>
 
 </html>
