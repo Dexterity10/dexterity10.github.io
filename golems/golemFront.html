@@ -1,758 +1,3288 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Golem Inc</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.prod.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Golem Inc</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.prod.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background-color: #080808;
+        background-image:
+          radial-gradient(
+            ellipse at 20% 0%,
+            rgba(168, 149, 106, 0.06) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse at 80% 100%,
+            rgba(155, 111, 191, 0.06) 0%,
+            transparent 60%
+          ),
+          repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 40px,
+            rgba(255, 255, 255, 0.012) 40px,
+            rgba(255, 255, 255, 0.012) 41px
+          ),
+          repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 60px,
+            rgba(255, 255, 255, 0.012) 60px,
+            rgba(255, 255, 255, 0.012) 61px
+          );
+        min-height: 100vh;
+        font-family: "Share Tech Mono", monospace;
+        color: #c8bfaf;
+      }
+      .title-bar {
+        background: linear-gradient(
+          180deg,
+          rgba(26, 22, 18, 0.97) 0%,
+          rgba(15, 13, 11, 0.97) 100%
+        );
+        border-bottom: 1px solid rgba(168, 149, 106, 0.25);
+        box-shadow: 0 4px 32px rgba(0, 0, 0, 0.8);
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      .title-bar::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          90deg,
+          transparent 0px,
+          transparent 3px,
+          rgba(168, 149, 106, 0.025) 3px,
+          rgba(168, 149, 106, 0.025) 4px
+        );
+        pointer-events: none;
+      }
+      .game-title {
+        font-family: "Cinzel Decorative", serif;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        background: linear-gradient(
+          135deg,
+          #c9a96e 0%,
+          #f0d898 45%,
+          #b8842a 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 0 12px rgba(212, 180, 131, 0.4));
+      }
+      .currency-chip {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 6px;
+      }
+      .stone-curr {
+        border-color: rgba(168, 149, 106, 0.4) !important;
+        box-shadow: 0 0 10px rgba(168, 149, 106, 0.1) inset;
+      }
+      .metal-curr {
+        border-color: rgba(122, 179, 200, 0.4) !important;
+        box-shadow: 0 0 10px rgba(122, 179, 200, 0.1) inset;
+      }
+      .gem-curr {
+        border-color: rgba(155, 111, 191, 0.4) !important;
+        box-shadow: 0 0 10px rgba(155, 111, 191, 0.1) inset;
+      }
 
-    body {
-      background-color: #080808;
-      background-image:
-        radial-gradient(ellipse at 20% 0%, rgba(168,149,106,0.06) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 100%, rgba(155,111,191,0.06) 0%, transparent 60%),
-        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px),
-        repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
-      min-height: 100vh;
-      font-family: 'Share Tech Mono', monospace;
-      color: #c8bfaf;
-    }
+      /* Main Nav */
+      .nav-bar {
+        background: rgba(14, 13, 12, 0.97);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        display: flex;
+        align-items: stretch;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      .nav-tab {
+        font-family: "Cinzel", serif;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 13px 28px;
+        cursor: pointer;
+        color: #6b6560;
+        transition: all 0.25s;
+        border: none;
+        border-bottom: 2px solid transparent;
+        background: none;
+        outline: none;
+        white-space: nowrap;
+      }
+      .nav-tab:hover {
+        color: #a09080;
+      }
+      .nav-tab.act-golems {
+        color: #d4b483;
+        border-bottom-color: #a8956a;
+        text-shadow: 0 0 14px rgba(212, 180, 131, 0.5);
+        background: linear-gradient(
+          180deg,
+          transparent,
+          rgba(168, 149, 106, 0.06)
+        );
+      }
+      .nav-tab.act-upgrades {
+        color: #b8d4a0;
+        border-bottom-color: #80a858;
+        text-shadow: 0 0 14px rgba(184, 212, 160, 0.5);
+        background: linear-gradient(
+          180deg,
+          transparent,
+          rgba(128, 168, 88, 0.06)
+        );
+      }
+      .nav-tab.act-options {
+        color: #a8b8c8;
+        border-bottom-color: #6880a0;
+        text-shadow: 0 0 14px rgba(168, 184, 200, 0.5);
+        background: linear-gradient(
+          180deg,
+          transparent,
+          rgba(104, 128, 160, 0.06)
+        );
+      }
+      .nav-spacer {
+        flex: 1;
+      }
 
-    /* ── Title Bar ── */
-    .title-bar {
-      background: linear-gradient(180deg, #1a1612 0%, #0f0d0b 100%);
-      border-bottom: 1px solid rgba(168,149,106,0.25);
-      box-shadow: 0 4px 32px rgba(0,0,0,0.6);
-      position: relative; overflow: hidden;
-    }
-    .title-bar::before {
-      content: ''; position: absolute; inset: 0;
-      background: repeating-linear-gradient(90deg, transparent 0px, transparent 3px, rgba(168,149,106,0.025) 3px, rgba(168,149,106,0.025) 4px);
-      pointer-events: none;
-    }
-    .game-title {
-      font-family: 'Cinzel Decorative', serif; font-weight: 900;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      background: linear-gradient(135deg, #c9a96e 0%, #f0d898 45%, #b8842a 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      filter: drop-shadow(0 0 12px rgba(212,180,131,0.4));
-    }
+      /* Sub Nav */
+      .sub-nav {
+        background: rgba(8, 8, 8, 0.95);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+      }
+      .sub-tab {
+        font-size: 1.4rem;
+        padding: 7px 24px;
+        cursor: pointer;
+        border: none;
+        background: none;
+        outline: none;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+        opacity: 0.4;
+      }
+      .sub-tab:hover {
+        opacity: 0.75;
+        transform: scale(1.12);
+      }
+      .sub-tab.sub-stone {
+        opacity: 1;
+        border-bottom-color: #a8956a;
+        background: linear-gradient(
+          180deg,
+          transparent,
+          rgba(168, 149, 106, 0.09)
+        );
+        filter: drop-shadow(0 0 7px rgba(168, 149, 106, 0.55));
+      }
+      .sub-tab.sub-metal {
+        opacity: 1;
+        border-bottom-color: #7ab3c8;
+        background: linear-gradient(
+          180deg,
+          transparent,
+          rgba(122, 179, 200, 0.09)
+        );
+        filter: drop-shadow(0 0 7px rgba(122, 179, 200, 0.55));
+      }
+      .sub-tab.sub-gem {
+        opacity: 1;
+        border-bottom-color: #9b6fbf;
+        background: linear-gradient(
+          180deg,
+          transparent,
+          rgba(155, 111, 191, 0.09)
+        );
+        filter: drop-shadow(0 0 7px rgba(155, 111, 191, 0.55));
+      }
 
-    /* ── Currency Chips ── */
-    .currency-chip { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; }
-    .stone-curr { border-color: rgba(168,149,106,0.4) !important; box-shadow: 0 0 10px rgba(168,149,106,0.1) inset; }
-    .metal-curr { border-color: rgba(122,179,200,0.4) !important; box-shadow: 0 0 10px rgba(122,179,200,0.1) inset; }
-    .gem-curr   { border-color: rgba(155,111,191,0.4) !important; box-shadow: 0 0 10px rgba(155,111,191,0.1) inset; }
+      /* Golem cards */
+      .golem-card {
+        background: linear-gradient(135deg, #141210 0%, #0e0d0b 100%);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s;
+      }
+      .golem-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.12),
+          transparent
+        );
+      }
+      .stone-card {
+        border-color: rgba(168, 149, 106, 0.18);
+      }
+      .stone-card:hover:not(.locked) {
+        border-color: rgba(168, 149, 106, 0.4);
+        box-shadow: 0 0 24px rgba(168, 149, 106, 0.1);
+      }
+      .metal-card {
+        border-color: rgba(122, 179, 200, 0.18);
+      }
+      .metal-card:hover:not(.locked) {
+        border-color: rgba(122, 179, 200, 0.4);
+        box-shadow: 0 0 24px rgba(122, 179, 200, 0.1);
+      }
+      .gem-card {
+        border-color: rgba(155, 111, 191, 0.18);
+      }
+      .gem-card:hover:not(.locked) {
+        border-color: rgba(155, 111, 191, 0.4);
+        box-shadow: 0 0 24px rgba(155, 111, 191, 0.1);
+      }
+      .golem-card.locked {
+        opacity: 0.45;
+        filter: grayscale(0.6);
+      }
+      .auto-active.stone-card {
+        box-shadow: 0 0 16px rgba(168, 149, 106, 0.18);
+        border-color: rgba(168, 149, 106, 0.35);
+      }
+      .auto-active.metal-card {
+        box-shadow: 0 0 16px rgba(122, 179, 200, 0.18);
+        border-color: rgba(122, 179, 200, 0.35);
+      }
+      .auto-active.gem-card {
+        box-shadow: 0 0 16px rgba(155, 111, 191, 0.18);
+        border-color: rgba(155, 111, 191, 0.35);
+      }
 
-    /* ── Nav ── */
-    .nav-bar { background: #0e0d0c; border-bottom: 1px solid rgba(255,255,255,0.07); display:flex; }
-    .nav-tab {
-      font-family: 'Cinzel', serif; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-      padding: 14px 40px; cursor: pointer; color: #6b6560; transition: all 0.25s;
-      border: none; border-bottom: 2px solid transparent; background: none; outline: none;
-    }
-    .nav-tab:hover { color: #a09080; }
-    .nav-tab.active-stone { color: #d4b483; border-bottom-color: #a8956a; text-shadow: 0 0 14px rgba(212,180,131,0.5); background: linear-gradient(180deg,transparent,rgba(168,149,106,0.06)); }
-    .nav-tab.active-metal { color: #a8d4e8; border-bottom-color: #7ab3c8; text-shadow: 0 0 14px rgba(168,212,232,0.5); background: linear-gradient(180deg,transparent,rgba(122,179,200,0.06)); }
-    .nav-tab.active-gem   { color: #c49ae0; border-bottom-color: #9b6fbf; text-shadow: 0 0 14px rgba(196,154,224,0.5); background: linear-gradient(180deg,transparent,rgba(155,111,191,0.06)); }
+      /* Cap meter */
+      .cap-meter {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        margin-bottom: 16px;
+      }
+      .cap-bar-wrap {
+        flex: 1;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .cap-bar-fill {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.3s;
+      }
+      .cap-bar-fill.full {
+        background: #c0392b !important;
+      }
+      .cap-full-chip {
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 3px 10px;
+        border-radius: 20px;
+        background: rgba(192, 57, 43, 0.15);
+        color: #e07060;
+        border: 1px solid rgba(192, 57, 43, 0.35);
+        white-space: nowrap;
+      }
 
-    /* ── Golem Cards ── */
-    .golem-card {
-      background: linear-gradient(135deg, #141210 0%, #0e0d0b 100%);
-      border: 1px solid rgba(255,255,255,0.06); border-radius: 10px;
-      position: relative; overflow: hidden; transition: all 0.3s;
-    }
-    .golem-card::before {
-      content:''; position:absolute; top:0; left:0; right:0; height:1px;
-      background: linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);
-    }
-    .stone-card { border-color: rgba(168,149,106,0.18); }
-    .stone-card:hover:not(.locked) { border-color: rgba(168,149,106,0.4); box-shadow: 0 0 24px rgba(168,149,106,0.1); }
-    .metal-card { border-color: rgba(122,179,200,0.18); }
-    .metal-card:hover:not(.locked) { border-color: rgba(122,179,200,0.4); box-shadow: 0 0 24px rgba(122,179,200,0.1); }
-    .gem-card   { border-color: rgba(155,111,191,0.18); }
-    .gem-card:hover:not(.locked)   { border-color: rgba(155,111,191,0.4); box-shadow: 0 0 24px rgba(155,111,191,0.1); }
-    .golem-card.locked { opacity: 0.45; filter: grayscale(0.6); }
+      /* Icons */
+      .golem-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        flex-shrink: 0;
+      }
+      .stone-icon {
+        background: rgba(168, 149, 106, 0.12);
+        border: 1px solid rgba(168, 149, 106, 0.3);
+      }
+      .metal-icon {
+        background: rgba(122, 179, 200, 0.12);
+        border: 1px solid rgba(122, 179, 200, 0.3);
+      }
+      .gem-icon {
+        background: rgba(155, 111, 191, 0.12);
+        border: 1px solid rgba(155, 111, 191, 0.3);
+      }
 
-    /* Active automation glow */
-    .auto-active.stone-card { box-shadow: 0 0 16px rgba(168,149,106,0.18); border-color: rgba(168,149,106,0.35); }
-    .auto-active.metal-card { box-shadow: 0 0 16px rgba(122,179,200,0.18); border-color: rgba(122,179,200,0.35); }
-    .auto-active.gem-card   { box-shadow: 0 0 16px rgba(155,111,191,0.18); border-color: rgba(155,111,191,0.35); }
+      /* Text */
+      .golem-name {
+        font-family: "Cinzel", serif;
+        font-weight: 600;
+        font-size: 1rem;
+        letter-spacing: 0.06em;
+      }
+      .stone-name {
+        color: #d4b483;
+      }
+      .metal-name {
+        color: #a8d4e8;
+      }
+      .gem-name {
+        color: #c49ae0;
+      }
+      .stat-label {
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #484038;
+        margin-bottom: 2px;
+      }
+      .stat-value {
+        font-family: "Share Tech Mono", monospace;
+        font-size: 0.85rem;
+      }
+      .stone-stat {
+        color: #c0a060;
+      }
+      .metal-stat {
+        color: #7ab3c8;
+      }
+      .gem-stat {
+        color: #9b6fbf;
+      }
 
-    /* ── Cap meter ── */
-    .cap-meter {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 16px; border-radius: 8px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      margin-bottom: 16px;
-    }
-    .cap-bar-wrap { flex:1; height:6px; background:rgba(255,255,255,0.07); border-radius:3px; overflow:hidden; }
-    .cap-bar-fill { height:100%; border-radius:3px; transition:width 0.3s; }
-    .cap-bar-fill.full { background: #c0392b !important; }
-    .cap-full-chip {
-      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 3px 10px; border-radius: 20px;
-      background: rgba(192,57,43,0.15); color: #e07060;
-      border: 1px solid rgba(192,57,43,0.35); white-space: nowrap;
-    }
+      /* Buy button */
+      .buy-btn {
+        font-family: "Cinzel", serif;
+        font-weight: 600;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 10px 22px;
+        border-radius: 6px;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        transition: all 0.2s;
+        white-space: nowrap;
+        line-height: 1.4;
+      }
+      .stone-btn {
+        background: linear-gradient(135deg, #6b4e1f, #4a3310);
+        color: #f0d898;
+        border: 1px solid rgba(168, 149, 106, 0.5);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+      .stone-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #8a6425, #5c4018);
+        box-shadow: 0 4px 16px rgba(168, 149, 106, 0.25);
+        transform: translateY(-1px);
+      }
+      .metal-btn {
+        background: linear-gradient(135deg, #1a3d52, #0d2535);
+        color: #c8e8f4;
+        border: 1px solid rgba(122, 179, 200, 0.5);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+      .metal-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #214d66, #122f42);
+        box-shadow: 0 4px 16px rgba(122, 179, 200, 0.25);
+        transform: translateY(-1px);
+      }
+      .gem-btn {
+        background: linear-gradient(135deg, #3d1a5c, #240d38);
+        color: #e0c4f8;
+        border: 1px solid rgba(155, 111, 191, 0.5);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+      .gem-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #4e2275, #2f1048);
+        box-shadow: 0 4px 16px rgba(155, 111, 191, 0.25);
+        transform: translateY(-1px);
+      }
+      .buy-btn:disabled {
+        opacity: 0.28;
+        cursor: not-allowed;
+        transform: none !important;
+      }
+      .buy-btn:active:not(:disabled) {
+        transform: translateY(0);
+      }
 
-    /* ── Icons ── */
-    .golem-icon {
-      width:64px; height:64px; border-radius:8px;
-      display:flex; align-items:center; justify-content:center;
-      font-size:2rem; flex-shrink:0;
-    }
-    .stone-icon { background: rgba(168,149,106,0.12); border: 1px solid rgba(168,149,106,0.3); }
-    .metal-icon { background: rgba(122,179,200,0.12); border: 1px solid rgba(122,179,200,0.3); }
-    .gem-icon   { background: rgba(155,111,191,0.12); border: 1px solid rgba(155,111,191,0.3); }
+      /* Automation */
+      .auto-panel {
+        margin-top: 12px;
+        padding: 10px 14px;
+        border-radius: 7px;
+        background: rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .auto-panel-label {
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #4a4038;
+        white-space: nowrap;
+      }
+      .auto-buy-btn {
+        font-family: "Cinzel", serif;
+        font-weight: 600;
+        font-size: 0.65rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 6px 14px;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .stone-auto-buy {
+        background: linear-gradient(135deg, #3a2a10, #251a08);
+        color: #c9a060;
+        border: 1px solid rgba(168, 149, 106, 0.3);
+      }
+      .stone-auto-buy:hover:not(:disabled) {
+        background: linear-gradient(135deg, #4a3518, #30220e);
+        transform: translateY(-1px);
+      }
+      .metal-auto-buy {
+        background: linear-gradient(135deg, #0e2030, #081520);
+        color: #78b0c8;
+        border: 1px solid rgba(122, 179, 200, 0.3);
+      }
+      .metal-auto-buy:hover:not(:disabled) {
+        background: linear-gradient(135deg, #142840, #0c1e2e);
+        transform: translateY(-1px);
+      }
+      .gem-auto-buy {
+        background: linear-gradient(135deg, #220e38, #160824);
+        color: #b080d8;
+        border: 1px solid rgba(155, 111, 191, 0.3);
+      }
+      .gem-auto-buy:hover:not(:disabled) {
+        background: linear-gradient(135deg, #2c1248, #1c0a30);
+        transform: translateY(-1px);
+      }
+      .auto-buy-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+        transform: none !important;
+      }
 
-    /* ── Text ── */
-    .golem-name { font-family:'Cinzel',serif; font-weight:600; font-size:1rem; letter-spacing:0.06em; }
-    .stone-name { color: #d4b483; }
-    .metal-name { color: #a8d4e8; }
-    .gem-name   { color: #c49ae0; }
-    .stat-label { font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:#484038; margin-bottom:2px; }
-    .stat-value { font-family:'Share Tech Mono',monospace; font-size:0.85rem; }
-    .stone-stat { color: #c0a060; }
-    .metal-stat { color: #7ab3c8; }
-    .gem-stat   { color: #9b6fbf; }
+      /* Toggle */
+      .toggle-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .toggle-track {
+        width: 36px;
+        height: 20px;
+        border-radius: 10px;
+        position: relative;
+        transition: all 0.25s;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        flex-shrink: 0;
+      }
+      .toggle-track.on-stone {
+        background: rgba(168, 149, 106, 0.35);
+        border-color: rgba(168, 149, 106, 0.6);
+        box-shadow: 0 0 8px rgba(168, 149, 106, 0.3);
+      }
+      .toggle-track.on-metal {
+        background: rgba(122, 179, 200, 0.35);
+        border-color: rgba(122, 179, 200, 0.6);
+        box-shadow: 0 0 8px rgba(122, 179, 200, 0.3);
+      }
+      .toggle-track.on-gem {
+        background: rgba(155, 111, 191, 0.35);
+        border-color: rgba(155, 111, 191, 0.6);
+        box-shadow: 0 0 8px rgba(155, 111, 191, 0.3);
+      }
+      .toggle-thumb {
+        position: absolute;
+        top: 2px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #888;
+        transition: all 0.25s;
+        left: 2px;
+      }
+      .toggle-thumb.on {
+        left: 18px;
+        background: #f0f0f0;
+      }
+      .toggle-label {
+        font-size: 0.65rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #555;
+        transition: color 0.2s;
+        white-space: nowrap;
+      }
+      .toggle-label.on-stone {
+        color: #c0a060;
+      }
+      .toggle-label.on-metal {
+        color: #7ab3c8;
+      }
+      .toggle-label.on-gem {
+        color: #9b6fbf;
+      }
+      @keyframes autoPulse {
+        0%,
+        100% {
+          opacity: 0.4;
+          transform: scale(0.85);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.15);
+        }
+      }
+      .auto-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        animation: autoPulse 1.2s ease-in-out infinite;
+      }
+      .auto-dot.stone {
+        background: #c0a060;
+      }
+      .auto-dot.metal {
+        background: #7ab3c8;
+      }
+      .auto-dot.gem {
+        background: #9b6fbf;
+      }
 
-    /* ── Buy button ── */
-    .buy-btn {
-      font-family:'Cinzel',serif; font-weight:600; font-size:0.75rem;
-      letter-spacing:0.1em; text-transform:uppercase;
-      padding:10px 22px; border-radius:6px;
-      cursor:pointer; border:none; outline:none;
-      transition:all 0.2s; white-space:nowrap; line-height:1.4;
-    }
-    .stone-btn { background:linear-gradient(135deg,#6b4e1f,#4a3310); color:#f0d898; border:1px solid rgba(168,149,106,0.5); box-shadow:0 2px 8px rgba(0,0,0,0.4); }
-    .stone-btn:hover:not(:disabled) { background:linear-gradient(135deg,#8a6425,#5c4018); box-shadow:0 4px 16px rgba(168,149,106,0.25); transform:translateY(-1px); }
-    .metal-btn { background:linear-gradient(135deg,#1a3d52,#0d2535); color:#c8e8f4; border:1px solid rgba(122,179,200,0.5); box-shadow:0 2px 8px rgba(0,0,0,0.4); }
-    .metal-btn:hover:not(:disabled) { background:linear-gradient(135deg,#214d66,#122f42); box-shadow:0 4px 16px rgba(122,179,200,0.25); transform:translateY(-1px); }
-    .gem-btn   { background:linear-gradient(135deg,#3d1a5c,#240d38); color:#e0c4f8; border:1px solid rgba(155,111,191,0.5); box-shadow:0 2px 8px rgba(0,0,0,0.4); }
-    .gem-btn:hover:not(:disabled)   { background:linear-gradient(135deg,#4e2275,#2f1048); box-shadow:0 4px 16px rgba(155,111,191,0.25); transform:translateY(-1px); }
-    .buy-btn:disabled { opacity:0.28; cursor:not-allowed; transform:none !important; }
-    .buy-btn:active:not(:disabled) { transform:translateY(0); }
+      /* Badges */
+      .owned-badge {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Share Tech Mono";
+        font-size: 1.05rem;
+        font-weight: bold;
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .stone-badge {
+        border: 1px solid rgba(168, 149, 106, 0.35);
+        color: #d4b483;
+      }
+      .metal-badge {
+        border: 1px solid rgba(122, 179, 200, 0.35);
+        color: #a8d4e8;
+      }
+      .gem-badge {
+        border: 1px solid rgba(155, 111, 191, 0.35);
+        color: #c49ae0;
+      }
+      .mult-badge {
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-family: "Share Tech Mono";
+        letter-spacing: 0.05em;
+      }
+      .stone-mult {
+        background: rgba(168, 149, 106, 0.15);
+        color: #d4b483;
+        border: 1px solid rgba(168, 149, 106, 0.25);
+      }
+      .metal-mult {
+        background: rgba(122, 179, 200, 0.15);
+        color: #a8d4e8;
+        border: 1px solid rgba(122, 179, 200, 0.25);
+      }
+      .gem-mult {
+        background: rgba(155, 111, 191, 0.15);
+        color: #c49ae0;
+        border: 1px solid rgba(155, 111, 191, 0.25);
+      }
 
-    /* ── Automation panel ── */
-    .auto-panel {
-      margin-top: 12px;
-      padding: 10px 14px;
-      border-radius: 7px;
-      background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.05);
-      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-    }
-    .auto-panel-label {
-      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #4a4038;
-      white-space: nowrap;
-    }
+      /* Ornament */
+      .ornament {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .ornament-line {
+        flex: 1;
+        height: 1px;
+      }
+      .stone-ol {
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(168, 149, 106, 0.35)
+        );
+      }
+      .stone-ol.rev {
+        background: linear-gradient(
+          270deg,
+          transparent,
+          rgba(168, 149, 106, 0.35)
+        );
+      }
+      .metal-ol {
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(122, 179, 200, 0.35)
+        );
+      }
+      .metal-ol.rev {
+        background: linear-gradient(
+          270deg,
+          transparent,
+          rgba(122, 179, 200, 0.35)
+        );
+      }
+      .gem-ol {
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(155, 111, 191, 0.35)
+        );
+      }
+      .gem-ol.rev {
+        background: linear-gradient(
+          270deg,
+          transparent,
+          rgba(155, 111, 191, 0.35)
+        );
+      }
+      .upg-ol {
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(128, 168, 88, 0.35)
+        );
+      }
+      .upg-ol.rev {
+        background: linear-gradient(
+          270deg,
+          transparent,
+          rgba(128, 168, 88, 0.35)
+        );
+      }
+      .opt-ol {
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(104, 128, 160, 0.35)
+        );
+      }
+      .opt-ol.rev {
+        background: linear-gradient(
+          270deg,
+          transparent,
+          rgba(104, 128, 160, 0.35)
+        );
+      }
 
-    /* Buy-automation button */
-    .auto-buy-btn {
-      font-family:'Cinzel',serif; font-weight:600; font-size:0.65rem;
-      letter-spacing:0.08em; text-transform:uppercase;
-      padding:6px 14px; border-radius:5px;
-      cursor:pointer; border:none; outline:none;
-      transition:all 0.2s; white-space:nowrap;
-    }
-    .stone-auto-buy { background:linear-gradient(135deg,#3a2a10,#251a08); color:#c9a060; border:1px solid rgba(168,149,106,0.3); }
-    .stone-auto-buy:hover:not(:disabled) { background:linear-gradient(135deg,#4a3518,#30220e); transform:translateY(-1px); }
-    .metal-auto-buy { background:linear-gradient(135deg,#0e2030,#081520); color:#78b0c8; border:1px solid rgba(122,179,200,0.3); }
-    .metal-auto-buy:hover:not(:disabled) { background:linear-gradient(135deg,#142840,#0c1e2e); transform:translateY(-1px); }
-    .gem-auto-buy   { background:linear-gradient(135deg,#220e38,#160824); color:#b080d8; border:1px solid rgba(155,111,191,0.3); }
-    .gem-auto-buy:hover:not(:disabled)   { background:linear-gradient(135deg,#2c1248,#1c0a30); transform:translateY(-1px); }
-    .auto-buy-btn:disabled { opacity:0.3; cursor:not-allowed; transform:none !important; }
+      /* Progress bars */
+      .prog-wrap {
+        margin-top: 10px;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .prog-fill {
+        height: 100%;
+        border-radius: 2px;
+        transition: width 0.4s;
+      }
 
-    /* ── Toggle Switch ── */
-    .toggle-wrap { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; }
-    .toggle-track {
-      width: 36px; height: 20px; border-radius: 10px;
-      position: relative; transition: all 0.25s;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      flex-shrink: 0;
-    }
-    .toggle-track.on-stone { background: rgba(168,149,106,0.35); border-color: rgba(168,149,106,0.6); box-shadow: 0 0 8px rgba(168,149,106,0.3); }
-    .toggle-track.on-metal { background: rgba(122,179,200,0.35); border-color: rgba(122,179,200,0.6); box-shadow: 0 0 8px rgba(122,179,200,0.3); }
-    .toggle-track.on-gem   { background: rgba(155,111,191,0.35); border-color: rgba(155,111,191,0.6); box-shadow: 0 0 8px rgba(155,111,191,0.3); }
-    .toggle-thumb {
-      position: absolute; top: 2px; width: 14px; height: 14px; border-radius: 50%;
-      background: #888; transition: all 0.25s; left: 2px;
-    }
-    .toggle-thumb.on { left: 18px; background: #f0f0f0; }
-    .toggle-label { font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: #555; transition: color 0.2s; white-space: nowrap; }
-    .toggle-label.on-stone { color: #c0a060; }
-    .toggle-label.on-metal { color: #7ab3c8; }
-    .toggle-label.on-gem   { color: #9b6fbf; }
+      /* Empowerment upgrade */
+      .emp-card {
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s;
+      }
+      .emp-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+      }
+      .stone-emp {
+        background: linear-gradient(135deg, #0d0f0a 0%, #080a06 100%);
+        border: 1px solid rgba(168, 149, 106, 0.22);
+      }
+      .stone-emp:hover {
+        border-color: rgba(168, 149, 106, 0.48);
+        box-shadow: 0 0 28px rgba(168, 149, 106, 0.1);
+      }
+      .metal-emp {
+        background: linear-gradient(135deg, #0a0d0f 0%, #060810 100%);
+        border: 1px solid rgba(122, 179, 200, 0.22);
+      }
+      .metal-emp:hover {
+        border-color: rgba(122, 179, 200, 0.48);
+        box-shadow: 0 0 28px rgba(122, 179, 200, 0.1);
+      }
+      .gem-emp {
+        background: linear-gradient(135deg, #0d0a0f 0%, #090610 100%);
+        border: 1px solid rgba(155, 111, 191, 0.22);
+      }
+      .gem-emp:hover {
+        border-color: rgba(155, 111, 191, 0.48);
+        box-shadow: 0 0 28px rgba(155, 111, 191, 0.1);
+      }
+      .emp-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.7rem;
+        flex-shrink: 0;
+      }
+      .stone-emp-icon {
+        background: rgba(168, 149, 106, 0.1);
+        border: 1px solid rgba(168, 149, 106, 0.22);
+      }
+      .metal-emp-icon {
+        background: rgba(122, 179, 200, 0.1);
+        border: 1px solid rgba(122, 179, 200, 0.22);
+      }
+      .gem-emp-icon {
+        background: rgba(155, 111, 191, 0.1);
+        border: 1px solid rgba(155, 111, 191, 0.22);
+      }
+      .emp-divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 20px 0 14px;
+      }
+      .emp-divider-line {
+        flex: 1;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .emp-divider-text {
+        font-size: 0.62rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #353030;
+      }
+      .bonus-stack {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .bonus-chip {
+        font-size: 0.62rem;
+        padding: 2px 7px;
+        border-radius: 12px;
+        font-family: "Share Tech Mono";
+        letter-spacing: 0.05em;
+      }
+      .stone-bonus-chip {
+        background: rgba(168, 149, 106, 0.15);
+        color: #d4b483;
+        border: 1px solid rgba(168, 149, 106, 0.2);
+      }
+      .metal-bonus-chip {
+        background: rgba(122, 179, 200, 0.15);
+        color: #a8d4e8;
+        border: 1px solid rgba(122, 179, 200, 0.2);
+      }
+      .gem-bonus-chip {
+        background: rgba(155, 111, 191, 0.15);
+        color: #c49ae0;
+        border: 1px solid rgba(155, 111, 191, 0.2);
+      }
 
-    /* Auto pulse dot */
-    @keyframes autoPulse {
-      0%, 100% { opacity: 0.4; transform: scale(0.85); }
-      50%       { opacity: 1;   transform: scale(1.15); }
-    }
-    .auto-dot {
-      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
-      animation: autoPulse 1.2s ease-in-out infinite;
-    }
-    .auto-dot.stone { background: #c0a060; }
-    .auto-dot.metal { background: #7ab3c8; }
-    .auto-dot.gem   { background: #9b6fbf; }
+      /* Empowerment buy btn */
+      .emp-btn {
+        font-family: "Cinzel", serif;
+        font-weight: 600;
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        transition: all 0.2s;
+        white-space: nowrap;
+        line-height: 1.4;
+        text-align: center;
+      }
+      .stone-emp-btn {
+        background: linear-gradient(135deg, #4a3818, #2e2210);
+        color: #e8c870;
+        border: 1px solid rgba(200, 168, 80, 0.5);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      }
+      .stone-emp-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #5e4820, #3a2c14);
+        box-shadow: 0 4px 18px rgba(200, 168, 80, 0.25);
+        transform: translateY(-1px);
+      }
+      .metal-emp-btn {
+        background: linear-gradient(135deg, #183848, #0e2230);
+        color: #90d0f0;
+        border: 1px solid rgba(100, 180, 220, 0.5);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      }
+      .metal-emp-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #1e4858, #12283a);
+        box-shadow: 0 4px 18px rgba(100, 180, 220, 0.25);
+        transform: translateY(-1px);
+      }
+      .gem-emp-btn {
+        background: linear-gradient(135deg, #301550, #1c0a30);
+        color: #d090f8;
+        border: 1px solid rgba(170, 100, 220, 0.5);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      }
+      .gem-emp-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #3c1a62, #240e3c);
+        box-shadow: 0 4px 18px rgba(170, 100, 220, 0.25);
+        transform: translateY(-1px);
+      }
+      .emp-btn:disabled {
+        opacity: 0.28;
+        cursor: not-allowed;
+        transform: none !important;
+      }
 
-    /* ── Owned badge ── */
-    .owned-badge {
-      width:48px; height:48px; border-radius:50%;
-      display:flex; align-items:center; justify-content:center;
-      font-family:'Share Tech Mono'; font-size:1.05rem; font-weight:bold;
-      background: rgba(255,255,255,0.04);
-    }
-    .stone-badge { border:1px solid rgba(168,149,106,0.35); color:#d4b483; }
-    .metal-badge { border:1px solid rgba(122,179,200,0.35); color:#a8d4e8; }
-    .gem-badge   { border:1px solid rgba(155,111,191,0.35); color:#c49ae0; }
+      /* Upgrades tab cards */
+      .upg-section-label {
+        font-family: "Cinzel", serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #50483a;
+        padding: 1.5rem 0 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .upg-section-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .upg-card {
+        background: linear-gradient(135deg, #111210 0%, #0c0d0a 100%);
+        border: 1px solid rgba(128, 168, 88, 0.15);
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s;
+        padding: 1.1rem;
+        margin-bottom: 0.6rem;
+      }
+      .upg-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(128, 168, 88, 0.12),
+          transparent
+        );
+      }
+      .upg-card:hover:not(.upg-done) {
+        border-color: rgba(128, 168, 88, 0.38);
+        box-shadow: 0 0 22px rgba(128, 168, 88, 0.07);
+      }
+      .upg-card.upg-done {
+        opacity: 0.52;
+        border-color: rgba(128, 168, 88, 0.07);
+      }
+      .upg-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+        background: rgba(128, 168, 88, 0.07);
+        border: 1px solid rgba(128, 168, 88, 0.18);
+      }
+      .upg-name {
+        font-family: "Cinzel", serif;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #b4cc90;
+        margin-bottom: 3px;
+      }
+      .upg-desc {
+        font-size: 0.73rem;
+        color: #50503a;
+        line-height: 1.55;
+      }
+      .upg-cost {
+        font-family: "Share Tech Mono";
+        font-size: 0.78rem;
+        color: #80a858;
+        margin-top: 5px;
+      }
+      .upg-warn {
+        font-size: 0.62rem;
+        color: #706040;
+        letter-spacing: 0.05em;
+        margin-top: 1px;
+      }
+      .upg-btn {
+        font-family: "Cinzel", serif;
+        font-weight: 600;
+        font-size: 0.68rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        transition: all 0.2s;
+        white-space: nowrap;
+        line-height: 1.4;
+        text-align: center;
+        background: linear-gradient(135deg, #283818, #18240e);
+        color: #b4cc90;
+        border: 1px solid rgba(128, 168, 88, 0.42);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      }
+      .upg-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #344820, #20301a);
+        box-shadow: 0 4px 14px rgba(128, 168, 88, 0.18);
+        transform: translateY(-1px);
+      }
+      .upg-btn:disabled {
+        opacity: 0.22;
+        cursor: not-allowed;
+        transform: none !important;
+      }
+      .upg-done-badge {
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 5px 12px;
+        border-radius: 20px;
+        background: rgba(128, 168, 88, 0.09);
+        color: #60883a;
+        border: 1px solid rgba(128, 168, 88, 0.18);
+        white-space: nowrap;
+      }
+      .upg-overdrive-badge {
+        background: rgba(210, 160, 40, 0.09);
+        color: #b09030;
+        border-color: rgba(210, 160, 40, 0.22);
+      }
 
-    /* ── Multiplier badge ── */
-    .mult-badge { font-size:0.7rem; padding:3px 8px; border-radius:4px; font-family:'Share Tech Mono'; letter-spacing:0.05em; }
-    .stone-mult { background:rgba(168,149,106,0.15); color:#d4b483; border:1px solid rgba(168,149,106,0.25); }
-    .metal-mult { background:rgba(122,179,200,0.15); color:#a8d4e8; border:1px solid rgba(122,179,200,0.25); }
-    .gem-mult   { background:rgba(155,111,191,0.15); color:#c49ae0; border:1px solid rgba(155,111,191,0.25); }
+      /* Options tab */
+      .opt-card {
+        background: linear-gradient(135deg, #131211 0%, #0e0d0c 100%);
+        border: 1px solid rgba(104, 128, 160, 0.15);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+      }
+      .opt-title {
+        font-family: "Cinzel", serif;
+        font-size: 0.95rem;
+        letter-spacing: 0.1em;
+        color: #7a8898;
+        margin-bottom: 1.1rem;
+      }
+      .opt-btn {
+        font-family: "Cinzel", serif;
+        font-weight: 600;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 10px 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.2s;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+      .opt-save {
+        background: linear-gradient(135deg, #1c2a10, #121c08);
+        color: #98c060;
+        border: 1px solid rgba(128, 180, 60, 0.4);
+      }
+      .opt-save:hover {
+        background: linear-gradient(135deg, #263818, #182810);
+        box-shadow: 0 4px 14px rgba(128, 180, 60, 0.2);
+        transform: translateY(-1px);
+      }
+      .opt-reset {
+        background: linear-gradient(135deg, #2a1010, #180808);
+        color: #c06060;
+        border: 1px solid rgba(180, 60, 60, 0.4);
+      }
+      .opt-reset:hover {
+        background: linear-gradient(135deg, #381818, #200e0e);
+        box-shadow: 0 4px 14px rgba(180, 60, 60, 0.2);
+        transform: translateY(-1px);
+      }
 
-    /* ── Ornament ── */
-    .ornament { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
-    .ornament-line { flex:1; height:1px; }
-    .stone-ol     { background: linear-gradient(90deg,transparent,rgba(168,149,106,0.35)); }
-    .stone-ol.rev { background: linear-gradient(270deg,transparent,rgba(168,149,106,0.35)); }
-    .metal-ol     { background: linear-gradient(90deg,transparent,rgba(122,179,200,0.35)); }
-    .metal-ol.rev { background: linear-gradient(270deg,transparent,rgba(122,179,200,0.35)); }
-    .gem-ol       { background: linear-gradient(90deg,transparent,rgba(155,111,191,0.35)); }
-    .gem-ol.rev   { background: linear-gradient(270deg,transparent,rgba(155,111,191,0.35)); }
+      /* Zenith card */
+      @keyframes zenithPulse {
+        0%,
+        100% {
+          box-shadow:
+            0 0 18px rgba(168, 149, 106, 0.08),
+            0 0 0 1px rgba(168, 149, 106, 0.1);
+        }
+        50% {
+          box-shadow:
+            0 0 36px rgba(168, 149, 106, 0.18),
+            0 0 0 1px rgba(168, 149, 106, 0.22);
+        }
+      }
+      .zenith-card {
+        animation: zenithPulse 3s ease-in-out infinite;
+      }
+      .stone-card.zenith-card {
+        animation-name: zenithPulseStone;
+      }
+      .metal-card.zenith-card {
+        animation-name: zenithPulseMetal;
+      }
+      .gem-card.zenith-card {
+        animation-name: zenithPulseGem;
+      }
+      @keyframes zenithPulseStone {
+        0%,
+        100% {
+          box-shadow: 0 0 20px rgba(168, 149, 106, 0.1);
+          border-color: rgba(168, 149, 106, 0.3);
+        }
+        50% {
+          box-shadow: 0 0 42px rgba(168, 149, 106, 0.25);
+          border-color: rgba(168, 149, 106, 0.55);
+        }
+      }
+      @keyframes zenithPulseMetal {
+        0%,
+        100% {
+          box-shadow: 0 0 20px rgba(122, 179, 200, 0.1);
+          border-color: rgba(122, 179, 200, 0.3);
+        }
+        50% {
+          box-shadow: 0 0 42px rgba(122, 179, 200, 0.25);
+          border-color: rgba(122, 179, 200, 0.55);
+        }
+      }
+      @keyframes zenithPulseGem {
+        0%,
+        100% {
+          box-shadow: 0 0 20px rgba(155, 111, 191, 0.1);
+          border-color: rgba(155, 111, 191, 0.3);
+        }
+        50% {
+          box-shadow: 0 0 42px rgba(155, 111, 191, 0.25);
+          border-color: rgba(155, 111, 191, 0.55);
+        }
+      }
+      .zenith-icon-ring {
+        animation: zenithIconSpin 8s linear infinite;
+        filter: drop-shadow(0 0 10px currentColor);
+      }
+      @keyframes zenithIconSpin {
+        0% {
+          box-shadow:
+            0 0 12px rgba(255, 255, 255, 0.06),
+            inset 0 0 12px rgba(255, 255, 255, 0.04);
+        }
+        50% {
+          box-shadow:
+            0 0 24px rgba(255, 255, 255, 0.14),
+            inset 0 0 20px rgba(255, 255, 255, 0.08);
+        }
+        100% {
+          box-shadow:
+            0 0 12px rgba(255, 255, 255, 0.06),
+            inset 0 0 12px rgba(255, 255, 255, 0.04);
+        }
+      }
 
-    /* ── Progress bars ── */
-    .prog-wrap { margin-top:10px; height:3px; background:rgba(255,255,255,0.05); border-radius:2px; overflow:hidden; }
-    .prog-fill { height:100%; border-radius:2px; transition:width 0.4s; }
-
-    /* ── Particles ── */
-    @keyframes floatUp {
-      0%   { opacity:1; transform:translateY(0) scale(1); }
-      100% { opacity:0; transform:translateY(-64px) scale(0.5); }
-    }
-    .float-particle { position:fixed; pointer-events:none; font-size:1.2rem; animation:floatUp 0.8s ease-out forwards; z-index:9999; }
-
-    .vdivider { width:1px; height:24px; background:rgba(255,255,255,0.08); flex-shrink:0; }
-
-    /* Unlock banner slide-in */
-    @keyframes slideIn {
-      from { opacity:0; transform: translateY(-12px); }
-      to   { opacity:1; transform: translateY(0); }
-    }
-    .unlock-banner { animation: slideIn 0.4s ease; }
-  </style>
-</head>
-<body>
-<div id="app">
-
-  <!-- ══ TITLE BAR ══ -->
-  <div class="title-bar" style="padding:1rem 1.5rem;">
-    <div style="max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
-      <div style="display:flex;align-items:center;gap:0.75rem;">
-        <span style="font-size:2rem;filter:drop-shadow(0 0 12px rgba(212,180,131,0.6))">⚙️</span>
-        <h1 class="game-title" style="font-size:2rem;">Golem Inc</h1>
-      </div>
-      <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
-        <div class="currency-chip stone-curr" style="padding:0.5rem 1rem;display:flex;align-items:center;gap:0.5rem;">
-          <span>🪨</span>
-          <div>
-            <div class="stat-label" style="color:#7a6840;">Stone</div>
-            <div class="stone-stat" style="font-size:1rem;">{{ formatNum(currency.stone) }}</div>
-          </div>
-        </div>
-        <div class="currency-chip metal-curr" style="padding:0.5rem 1rem;display:flex;align-items:center;gap:0.5rem;">
-          <span>⚙️</span>
-          <div>
-            <div class="stat-label" style="color:#3a6070;">Metal</div>
-            <div class="metal-stat" style="font-size:1rem;">{{ formatNum(currency.metal) }}</div>
-          </div>
-        </div>
-        <div class="currency-chip gem-curr" style="padding:0.5rem 1rem;display:flex;align-items:center;gap:0.5rem;">
-          <span>💎</span>
-          <div>
-            <div class="stat-label" style="color:#5a3075;">Gem</div>
-            <div class="gem-stat" style="font-size:1rem;">{{ formatNum(currency.gem) }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ NAV BAR ══ -->
-  <div class="nav-bar">
-    <button v-for="tab in tabs" :key="tab.id"
-      class="nav-tab"
-      :class="activeTab === tab.id ? 'active-' + tab.id : ''"
-      @click="activeTab = tab.id">
-      {{ tab.icon }} {{ tab.label }}
-    </button>
-  </div>
-
-  <!-- ══ CONTENT ══ -->
-  <div style="max-width:960px;margin:0 auto;padding:2rem 1rem;">
-    <div v-for="tab in tabs" :key="tab.id" v-show="activeTab === tab.id">
-
-      <!-- Section header -->
-      <div class="ornament">
-        <div class="ornament-line" :class="tab.id + '-ol'"></div>
-        <span :class="tab.id + '-name'" style="font-family:'Cinzel',serif;letter-spacing:0.15em;text-transform:uppercase;font-size:0.78rem;">
-          {{ tab.icon }} {{ tab.label }} Golems
-        </span>
-        <div class="ornament-line rev" :class="tab.id + '-ol rev'"></div>
-      </div>
-
-      <!-- ── LOCKED STATE ── -->
-      <div v-if="!unlocked[tab.id]" class="golem-card locked" :class="tab.id + '-card'" style="padding:2rem;text-align:center;">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">🔒</div>
-        <div class="golem-name" :class="tab.id + '-name'" style="margin-bottom:0.5rem;">{{ tab.label }} Golems Locked</div>
-        <div style="font-size:0.8rem;color:#555;margin-bottom:1.25rem;">
-          Accumulate <span :class="prevTabColor(tab.id)">5,000 {{ tab.id === 'metal' ? '🪨 Stone' : '⚙️ Metal' }}</span> to unlock.
-          You will receive one free {{ tab.label }} Golem 1 upon unlocking.
-        </div>
-        <div style="max-width:320px;margin:0 auto;">
-          <div style="display:flex;justify-content:space-between;font-size:0.72rem;margin-bottom:5px;">
-            <span :class="prevTabColor(tab.id)">{{ formatNum(tab.id === 'metal' ? currency.stone : currency.metal) }} / 5,000</span>
-            <span style="color:#3a3530;">{{ Math.min(100, Math.floor(((tab.id === 'metal' ? currency.stone : currency.metal) / 5000) * 100)) }}%</span>
-          </div>
-          <div style="height:7px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;">
-            <div :style="{
-              width: Math.min(100, ((tab.id === 'metal' ? currency.stone : currency.metal) / 5000) * 100) + '%',
-              height:'100%', borderRadius:'4px', transition:'width 0.4s',
-              background: tab.id === 'metal' ? '#a8956a' : '#7ab3c8'
-            }"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── UNLOCKED TAB CONTENT ── -->
-      <template v-if="unlocked[tab.id]">
-
-        <!-- Cap meter -->
-        <div class="cap-meter">
-          <span style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:#484038;white-space:nowrap;">Golems Active</span>
-          <div class="cap-bar-wrap">
-            <div class="cap-bar-fill"
-              :class="{ full: totalOwned(tab.id) >= GOLEM_CAP }"
-              :style="{
-                width: (totalOwned(tab.id) / GOLEM_CAP * 100) + '%',
-                background: totalOwned(tab.id) >= GOLEM_CAP ? '' : colors[tab.id]
-              }"></div>
-          </div>
-          <span :style="{ color: totalOwned(tab.id) >= GOLEM_CAP ? '#e07060' : colors[tab.id], fontSize:'0.8rem', fontFamily:'Share Tech Mono', whiteSpace:'nowrap' }">
-            {{ totalOwned(tab.id) }} / {{ GOLEM_CAP }}
-          </span>
-          <span v-if="totalOwned(tab.id) >= GOLEM_CAP" class="cap-full-chip">Cap Reached</span>
-        </div>
-
-        <!-- Golem rows -->
-        <div style="display:flex;flex-direction:column;gap:1rem;">
-          <div v-for="(golem, idx) in golems[tab.id]" :key="golem.id"
-            class="golem-card" :class="[tab.id + '-card', automation[tab.id][idx].on ? 'auto-active' : '']"
-            style="padding:1.25rem;">
-
-            <!-- ── Main row ── -->
-            <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-
-              <!-- Icon -->
-              <div class="golem-icon" :class="tab.id + '-icon'" style="position:relative;">
-                {{ golem.icon }}
-                <!-- Pulse dot when automating -->
-                <div v-if="automation[tab.id][idx].on"
-                  class="auto-dot" :class="tab.id"
-                  style="position:absolute;bottom:4px;right:4px;"></div>
-              </div>
-
-              <!-- Details -->
-              <div style="flex:1;min-width:0;">
-                <div class="golem-name" :class="tab.id + '-name'" style="margin-bottom:0.5rem;">{{ golem.name }}</div>
-                <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-
-                  <div>
-                    <div class="stat-label">Cost</div>
-                    <div class="stat-value" :class="tab.id + '-stat'">
-                      <template v-if="idx === 0">10 {{ tab.currSymbol }}</template>
-                      <template v-else>3× {{ golems[tab.id][idx-1].name }}</template>
+      /* Zenith activate button */
+      .zenith-activate-btn {
+        font-family: "Cinzel", serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        padding: 16px 36px;
+        border-radius: 8px;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.25s;
+        width: 100%;
+        max-width: 520px;
+        line-height: 1.4;
+        position: relative;
+        overflow: hidden;
+      }
+      .stone-zenith-btn {
+        background: linear-gradient(135deg, #3a2a10, #1e1608);
+        color: #f0d898;
+        border: 1px solid rgba(212, 180, 131, 0.5);
+        box-shadow: 0 4px 24px rgba(168, 149, 106, 0.2);
+      }
+      .stone-zenith-btn:hover {
+        background: linear-gradient(135deg, #503a18, #2a1e0c);
+        box-shadow: 0 6px 32px rgba(168, 149, 106, 0.35);
+        transform: translateY(-2px);
+      }
+      .metal-zenith-btn {
+        background: linear-gradient(135deg, #0e2a3a, #081820);
+        color: #c8e8f4;
+        border: 1px solid rgba(122, 179, 200, 0.5);
+        box-shadow: 0 4px 24px rgba(122, 179, 200, 0.2);
+      }
+      .metal-zenith-btn:hover {
+        background: linear-gradient(135deg, #14384e, #0c2230);
+        box-shadow: 0 6px 32px rgba(122, 179, 200, 0.35);
+        transform: translateY(-2px);
+      }
+      .gem-zenith-btn {
+        background: linear-gradient(135deg, #260c3c, #140820);
+        color: #e0c4f8;
+        border: 1px solid rgba(155, 111, 191, 0.5);
+        box-shadow: 0 4px 24px rgba(155, 111, 191, 0.2);
+      }
+      .gem-zenith-btn:hover {
+        background: linear-gradient(135deg, #321050, #1c0a28);
+        box-shadow: 0 6px 32px rgba(155, 111, 191, 0.35);
+        transform: translateY(-2px);
+      }
+      .zenith-activate-btn:active {
+        transform: translateY(0);
+      }
+      @keyframes floatUp {
+        0% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-64px) scale(0.5);
+        }
+      }
+      .float-particle {
+        position: fixed;
+        pointer-events: none;
+        font-size: 1.2rem;
+        animation: floatUp 0.8s ease-out forwards;
+        z-index: 9999;
+      }
+      .vdivider {
+        width: 1px;
+        height: 24px;
+        background: rgba(255, 255, 255, 0.08);
+        flex-shrink: 0;
+      }
+      .fade-enter-active,
+      .fade-leave-active {
+        transition: opacity 0.4s;
+      }
+      .fade-enter-from,
+      .fade-leave-to {
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- STICKY HEADER -->
+      <div style="position: sticky; top: 0; z-index: 100">
+        <!-- Title Bar -->
+        <div class="title-bar" style="padding: 0.55rem 1.4rem">
+          <div
+            style="
+              max-width: 1000px;
+              margin: 0 auto;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              flex-wrap: wrap;
+              gap: 0.55rem;
+            "
+          >
+            <div style="display: flex; align-items: center; gap: 0.65rem">
+              <span
+                style="
+                  font-size: 1.45rem;
+                  filter: drop-shadow(0 0 12px rgba(212, 180, 131, 0.6));
+                "
+                >⚙️</span
+              >
+              <h1 class="game-title" style="font-size: 1.45rem">Golem Inc</h1>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+              "
+            >
+              <div
+                class="currency-chip stone-curr"
+                style="
+                  padding: 0.28rem 0.65rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 0.4rem;
+                "
+              >
+                <span style="font-size: 0.95rem">🪨</span>
+                <div>
+                  <div style="display: flex; align-items: baseline; gap: 5px">
+                    <div class="stone-stat" style="font-size: 0.88rem">
+                      {{ formatNum(currency.stone) }}
+                    </div>
+                    <div
+                      v-if="unlocked.stone && totalIncome('stone')>0"
+                      class="stone-stat"
+                      style="font-size: 0.6rem; opacity: 0.55"
+                    >
+                      +{{ formatNum(totalIncome('stone')) }}/s
                     </div>
                   </div>
-
-                  <div class="vdivider"></div>
-
-                  <div>
-                    <div class="stat-label">Multiplier</div>
-                    <span class="mult-badge" :class="tab.id + '-mult'">×{{ golem.multiplier }}</span>
+                  <div
+                    class="stat-label"
+                    style="color: #7a6840; font-size: 0.52rem"
+                  >
+                    Stone
                   </div>
-
-                  <div class="vdivider"></div>
-
-                  <div>
-                    <div class="stat-label">Generates / sec</div>
-                    <div class="stat-value" :class="tab.id + '-stat'">{{ golem.multiplier }} {{ tab.currSymbol }}</div>
-                  </div>
-
-                  <template v-if="golem.bought > 0">
-                    <div class="vdivider"></div>
-                    <div>
-                      <div class="stat-label">Total Output</div>
-                      <div class="stat-value" :class="tab.id + '-stat'">{{ formatNum(golem.bought * golem.multiplier) }}/s</div>
-                    </div>
-                  </template>
-
                 </div>
               </div>
-
-              <!-- Owned + Buy -->
-              <div style="display:flex;align-items:center;gap:1rem;flex-shrink:0;">
-                <div style="text-align:center;">
-                  <div class="stat-label" style="margin-bottom:4px;">Owned</div>
-                  <div class="owned-badge" :class="tab.id + '-badge'">{{ golem.bought }}</div>
+              <div
+                class="currency-chip metal-curr"
+                style="
+                  padding: 0.28rem 0.65rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 0.4rem;
+                "
+              >
+                <span style="font-size: 0.95rem">⚙️</span>
+                <div>
+                  <div style="display: flex; align-items: baseline; gap: 5px">
+                    <div class="metal-stat" style="font-size: 0.88rem">
+                      {{ formatNum(currency.metal) }}
+                    </div>
+                    <div
+                      v-if="unlocked.metal && totalIncome('metal')>0"
+                      class="metal-stat"
+                      style="font-size: 0.6rem; opacity: 0.55"
+                    >
+                      +{{ formatNum(totalIncome('metal')) }}/s
+                    </div>
+                  </div>
+                  <div
+                    class="stat-label"
+                    style="color: #3a6070; font-size: 0.52rem"
+                  >
+                    Metal
+                  </div>
                 </div>
-                <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
-                  <button class="buy-btn" :class="tab.id + '-btn'"
-                    :disabled="!canAfford(tab.id, idx)"
-                    @click="buyGolem(tab.id, idx, $event)">
-                    Buy
+              </div>
+              <div
+                class="currency-chip gem-curr"
+                style="
+                  padding: 0.28rem 0.65rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 0.4rem;
+                "
+              >
+                <span style="font-size: 0.95rem">💎</span>
+                <div>
+                  <div style="display: flex; align-items: baseline; gap: 5px">
+                    <div class="gem-stat" style="font-size: 0.88rem">
+                      {{ formatNum(currency.gem) }}
+                    </div>
+                    <div
+                      v-if="unlocked.gem && totalIncome('gem')>0"
+                      class="gem-stat"
+                      style="font-size: 0.6rem; opacity: 0.55"
+                    >
+                      +{{ formatNum(totalIncome('gem')) }}/s
+                    </div>
+                  </div>
+                  <div
+                    class="stat-label"
+                    style="color: #5a3075; font-size: 0.52rem"
+                  >
+                    Gem
+                  </div>
+                </div>
+              </div>
+              <!-- save toast -->
+              <transition name="fade">
+                <span
+                  v-if="saveStatus"
+                  :style="{fontSize:'0.6rem',letterSpacing:'0.1em',textTransform:'uppercase',padding:'4px 10px',borderRadius:'4px',background:saveStatus==='saved'?'rgba(60,120,60,0.2)':saveStatus==='loaded'?'rgba(60,80,140,0.2)':'rgba(140,60,60,0.2)',color:saveStatus==='saved'?'#80c880':saveStatus==='loaded'?'#80a0e8':'#e08080',border:'1px solid '+(saveStatus==='saved'?'rgba(80,160,80,0.3)':saveStatus==='loaded'?'rgba(80,100,180,0.3)':'rgba(160,80,80,0.3)'),whiteSpace:'nowrap'}"
+                >
+                  {{ saveStatus==='saved'?'✓ Saved':saveStatus==='loaded'?'↑
+                  Loaded':saveStatus==='reset'?'✕ Reset':'! Error' }}
+                </span>
+              </transition>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Nav -->
+        <div class="nav-bar">
+          <button
+            class="nav-tab"
+            :class="mainTab==='golems'?'act-golems':''"
+            @click="mainTab='golems'"
+          >
+            ⚒ Golems
+          </button>
+          <button
+            class="nav-tab"
+            :class="mainTab==='upgrades'?'act-upgrades':''"
+            @click="mainTab='upgrades'"
+          >
+            ✦ Upgrades
+          </button>
+          <div class="nav-spacer"></div>
+          <button
+            class="nav-tab"
+            :class="mainTab==='options'?'act-options':''"
+            @click="mainTab='options'"
+          >
+            ⚙ Options
+          </button>
+        </div>
+
+        <!-- Sub Nav (golems only) -->
+        <div v-if="mainTab==='golems'" class="sub-nav">
+          <button
+            class="sub-tab"
+            :class="activeTab==='stone'?'sub-stone':''"
+            @click="activeTab='stone'"
+            title="Stone"
+          >
+            🪨
+          </button>
+          <button
+            class="sub-tab"
+            :class="activeTab==='metal'?'sub-metal':''"
+            @click="activeTab='metal'"
+            title="Metal"
+          >
+            ⚙️
+          </button>
+          <button
+            class="sub-tab"
+            :class="activeTab==='gem'?'sub-gem':''"
+            @click="activeTab='gem'"
+            title="Gem"
+          >
+            💎
+          </button>
+        </div>
+      </div>
+      <!-- /sticky -->
+
+      <!-- CONTENT -->
+      <div style="max-width: 1000px; margin: 0 auto; padding: 1.75rem 1rem">
+        <!-- ═══ GOLEMS ═══ -->
+        <div v-if="mainTab==='golems'">
+          <div
+            v-for="tab in materialTabs"
+            :key="tab.id"
+            v-show="activeTab===tab.id"
+          >
+            <div class="ornament">
+              <div class="ornament-line" :class="tab.id+'-ol'"></div>
+              <span
+                :class="tab.id+'-name'"
+                style="
+                  font-family: &quot;Cinzel&quot;, serif;
+                  letter-spacing: 0.15em;
+                  text-transform: uppercase;
+                  font-size: 0.78rem;
+                "
+                >{{ tab.icon }} {{ tab.label }} Golems</span
+              >
+              <div class="ornament-line rev" :class="tab.id+'-ol rev'"></div>
+            </div>
+
+            <!-- Locked -->
+            <div
+              v-if="!unlocked[tab.id]"
+              class="golem-card locked"
+              :class="tab.id+'-card'"
+              style="padding: 2rem; text-align: center"
+            >
+              <div style="font-size: 2.5rem; margin-bottom: 1rem">🔒</div>
+              <div
+                class="golem-name"
+                :class="tab.id+'-name'"
+                style="margin-bottom: 0.5rem"
+              >
+                {{ tab.label }} Golems Locked
+              </div>
+              <div
+                style="font-size: 0.8rem; color: #555; margin-bottom: 1.25rem"
+              >
+                Accumulate
+                <span :class="prevTabColor(tab.id)"
+                  >5,000 {{ tab.id==='metal'?'🪨 Stone':'⚙️ Metal' }}</span
+                >
+                to unlock. You will receive one free {{ tab.label }} Golem 1.
+              </div>
+              <div style="max-width: 320px; margin: 0 auto">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 0.72rem;
+                    margin-bottom: 5px;
+                  "
+                >
+                  <span :class="prevTabColor(tab.id)"
+                    >{{
+                    formatNum(tab.id==='metal'?currency.stone:currency.metal) }}
+                    / 5,000</span
+                  >
+                  <span style="color: #3a3530"
+                    >{{
+                    Math.min(100,Math.floor(((tab.id==='metal'?currency.stone:currency.metal)/5000)*100))
+                    }}%</span
+                  >
+                </div>
+                <div
+                  style="
+                    height: 7px;
+                    background: rgba(255, 255, 255, 0.06);
+                    border-radius: 4px;
+                    overflow: hidden;
+                  "
+                >
+                  <div
+                    :style="{width:Math.min(100,((tab.id==='metal'?currency.stone:currency.metal)/5000)*100)+'%',height:'100%',borderRadius:'4px',transition:'width 0.4s',background:tab.id==='metal'?'#a8956a':'#7ab3c8'}"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Unlocked -->
+            <template v-if="unlocked[tab.id]">
+              <!-- Cap meter -->
+              <div class="cap-meter">
+                <span
+                  style="
+                    font-size: 0.65rem;
+                    letter-spacing: 0.1em;
+                    text-transform: uppercase;
+                    color: #484038;
+                    white-space: nowrap;
+                  "
+                  >Golems Active</span
+                >
+                <div class="cap-bar-wrap">
+                  <div
+                    class="cap-bar-fill"
+                    :class="{full:totalOwned(tab.id)>=golemCap(tab.id)}"
+                    :style="{width:(totalOwned(tab.id)/golemCap(tab.id)*100)+'%',background:totalOwned(tab.id)>=golemCap(tab.id)?'':colors[tab.id]}"
+                  ></div>
+                </div>
+                <span
+                  :style="{color:totalOwned(tab.id)>=golemCap(tab.id)?'#e07060':colors[tab.id],fontSize:'0.8rem',fontFamily:'Share Tech Mono',whiteSpace:'nowrap'}"
+                >
+                  {{ totalOwned(tab.id) }} / {{ golemCap(tab.id) }}
+                </span>
+                <span
+                  v-if="totalOwned(tab.id)>=golemCap(tab.id)"
+                  class="cap-full-chip"
+                  >Cap Reached</span
+                >
+              </div>
+
+              <!-- ── ZENITH VIEW ── -->
+              <template v-if="zeniths[tab.id]">
+                <div
+                  class="golem-card"
+                  :class="[tab.id+'-card', zeniths_anyAutoOn(tab.id)?'auto-active':'', 'zenith-card']"
+                  style="padding: 1.5rem; position: relative"
+                >
+                  <!-- Dismiss -->
+                  <button
+                    @click="deactivateZenith(tab.id)"
+                    style="
+                      position: absolute;
+                      top: 10px;
+                      right: 14px;
+                      background: none;
+                      border: none;
+                      color: #4a4038;
+                      cursor: pointer;
+                      font-size: 0.62rem;
+                      letter-spacing: 0.1em;
+                      font-family: &quot;Cinzel&quot;, serif;
+                      transition: color 0.2s;
+                    "
+                    onmouseover="this.style.color = '#8a7060'"
+                    onmouseout="this.style.color = '#4a4038'"
+                  >
+                    ↩ Revert
                   </button>
-                  <div v-if="!canAfford(tab.id, idx)" style="font-size:0.58rem;color:#4a4038;text-align:center;max-width:80px;line-height:1.3;">
-                    <template v-if="idx === 0 && totalOwned(tab.id) >= GOLEM_CAP">Cap full</template>
-                    <template v-else-if="idx === 0">Need {{ golem.baseCost }} {{ tab.label }}</template>
-                    <template v-else>Need 3× G{{ idx }}</template>
+
+                  <!-- Zenith title badge -->
+                  <div style="text-align: center; margin-bottom: 1.1rem">
+                    <div
+                      class="golem-name"
+                      :class="tab.id+'-name'"
+                      style="
+                        font-size: 1.3rem;
+                        letter-spacing: 0.18em;
+                        text-shadow: 0 0 18px currentColor;
+                      "
+                    >
+                      ✦ {{ tab.label }} Golem Zenith ✦
+                    </div>
+                    <div
+                      style="
+                        font-size: 0.6rem;
+                        letter-spacing: 0.18em;
+                        text-transform: uppercase;
+                        color: #403830;
+                        margin-top: 3px;
+                      "
+                    >
+                      Unified Form · All Tiers Merged
+                    </div>
                   </div>
+
+                  <div
+                    style="
+                      display: flex;
+                      align-items: flex-start;
+                      gap: 1.2rem;
+                      flex-wrap: wrap;
+                    "
+                  >
+                    <!-- Zenith icon -->
+                    <div
+                      style="
+                        position: relative;
+                        width: 80px;
+                        height: 80px;
+                        flex-shrink: 0;
+                      "
+                    >
+                      <div
+                        :class="tab.id+'-icon'"
+                        class="zenith-icon-ring"
+                        style="
+                          width: 80px;
+                          height: 80px;
+                          border-radius: 50%;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          font-size: 2.8rem;
+                          border-width: 2px;
+                          border-style: solid;
+                        "
+                      >
+                        {{ tab.id==='stone'?'🌋':tab.id==='metal'?'🛸':'🌌' }}
+                      </div>
+                      <div
+                        v-if="zeniths_anyAutoOn(tab.id)"
+                        class="auto-dot"
+                        :class="tab.id"
+                        style="
+                          position: absolute;
+                          bottom: 4px;
+                          right: 4px;
+                          width: 10px;
+                          height: 10px;
+                        "
+                      ></div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div style="flex: 1; min-width: 200px">
+                      <div
+                        style="
+                          display: flex;
+                          align-items: center;
+                          gap: 1rem;
+                          flex-wrap: wrap;
+                          margin-bottom: 10px;
+                        "
+                      >
+                        <div>
+                          <div class="stat-label">Total Golems</div>
+                          <div class="stat-value" :class="tab.id+'-stat'">
+                            {{ zeniths_totalOwned(tab.id) }}
+                          </div>
+                        </div>
+                        <div class="vdivider"></div>
+                        <div>
+                          <div class="stat-label">Total Income</div>
+                          <div class="stat-value" :class="tab.id+'-stat'">
+                            {{ formatNum(totalIncome(tab.id)) }}/s
+                          </div>
+                        </div>
+                        <div class="vdivider"></div>
+                        <div>
+                          <div class="stat-label">Base Multiplier</div>
+                          <div class="stat-value" :class="tab.id+'-stat'">
+                            ×{{ (1+multUpgrades[tab.id]*MULT_BONUS).toFixed(1)
+                            }}
+                          </div>
+                        </div>
+                        <div class="vdivider"></div>
+                        <div>
+                          <div class="stat-label">Tiers Active</div>
+                          <div class="stat-value" :class="tab.id+'-stat'">
+                            {{
+                            fifthUnlocked[tab.id]?5:fourthUnlocked[tab.id]?4:3
+                            }}
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Per-tier breakdown chips -->
+                      <div style="display: flex; gap: 5px; flex-wrap: wrap">
+                        <span
+                          v-for="(g,i) in visibleGolems(tab.id)"
+                          :key="i"
+                          class="bonus-chip"
+                          :class="tab.id+'-bonus-chip'"
+                          style="font-size: 0.6rem; padding: 3px 8px"
+                        >
+                          {{ g.icon }} G{{ i+1 }}: {{ g.bought }}× · ×{{
+                          effectiveMult(tab.id,g).toFixed(1) }} ·
+                          <span :class="tab.id+'-stat'"
+                            >{{ formatNum(g.bought*effectiveMult(tab.id,g))
+                            }}/s</span
+                          >
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Automation panel -->
+                    <div
+                      style="flex-shrink: 0; min-width: 160px; max-width: 220px"
+                    >
+                      <div
+                        class="auto-panel"
+                        style="
+                          flex-direction: column;
+                          align-items: flex-start;
+                          gap: 8px;
+                        "
+                      >
+                        <span class="auto-panel-label">Automation</span>
+
+                        <!-- Unpurchased autos first -->
+                        <template
+                          v-for="(g,i) in visibleGolems(tab.id)"
+                          :key="'za-buy-'+i"
+                        >
+                          <button
+                            v-if="!automation[tab.id][i].purchased"
+                            class="auto-buy-btn"
+                            :class="tab.id+'-auto-buy'"
+                            :disabled="currency[tab.id]<automationCost(i)"
+                            @click="purchaseAutomation(tab.id,i,$event)"
+                            style="width: 100%; font-size: 0.6rem"
+                          >
+                            Unlock G{{ i+1 }} Auto · {{
+                            formatNum(automationCost(i)) }} {{ tab.currSymbol }}
+                          </button>
+                        </template>
+
+                        <!-- Master toggle: only when ALL tiers have automation purchased -->
+                        <template
+                          v-if="visibleGolems(tab.id).every((_,i)=>automation[tab.id][i].purchased)"
+                        >
+                          <div
+                            class="toggle-wrap"
+                            style="width: 100%"
+                            @click="(()=>{ const allOn=zeniths_allAutoOn(tab.id); visibleGolems(tab.id).forEach((_,i)=>{ automation[tab.id][i].on=!allOn; }); })()"
+                          >
+                            <div
+                              class="toggle-track"
+                              :class="zeniths_allAutoOn(tab.id)?'on-'+tab.id:''"
+                            >
+                              <div
+                                class="toggle-thumb"
+                                :class="zeniths_allAutoOn(tab.id)?'on':''"
+                              ></div>
+                            </div>
+                            <span
+                              class="toggle-label"
+                              :class="zeniths_allAutoOn(tab.id)?'on-'+tab.id:''"
+                            >
+                              {{ zeniths_allAutoOn(tab.id)?'All Auto: ON':'All
+                              Auto: OFF' }}
+                            </span>
+                          </div>
+                          <div
+                            v-if="zeniths_anyAutoOn(tab.id)&&!zeniths_allAutoOn(tab.id)"
+                            style="font-size: 0.6rem; color: #484038"
+                          >
+                            Partial — some tiers on
+                          </div>
+                        </template>
+                        <!-- Partial purchase state -->
+                        <template v-else-if="zeniths_anyAutoOn(tab.id)">
+                          <div style="font-size: 0.6rem; color: #484038">
+                            ⚡ Some autos active
+                          </div>
+                        </template>
+
+                        <span
+                          v-if="visibleGolems(tab.id).every((_,i)=>automation[tab.id][i].purchased)"
+                          style="
+                            font-size: 0.58rem;
+                            color: #3a3530;
+                            letter-spacing: 0.06em;
+                            margin-top: 2px;
+                          "
+                          >ALL PURCHASED</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Empowerment still shown in zenith -->
+                <div class="emp-divider">
+                  <div class="emp-divider-line"></div>
+                  <span class="emp-divider-text">⬆ Golem Empowerment</span>
+                  <div class="emp-divider-line"></div>
+                </div>
+                <div
+                  class="emp-card"
+                  :class="tab.id+'-emp'"
+                  style="padding: 1.25rem"
+                >
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 1rem;
+                      flex-wrap: wrap;
+                    "
+                  >
+                    <div class="emp-icon" :class="tab.id+'-emp-icon'">⬆️</div>
+                    <div style="flex: 1; min-width: 0">
+                      <div
+                        class="golem-name"
+                        :class="tab.id+'-name'"
+                        style="margin-bottom: 0.4rem"
+                      >
+                        {{ tab.label }} Empowerment
+                        <span
+                          v-if="multUpgrades[tab.id]>0"
+                          style="
+                            font-size: 0.72rem;
+                            margin-left: 8px;
+                            font-family: &quot;Share Tech Mono&quot;;
+                          "
+                          >(×{{ multUpgrades[tab.id] }} purchased)</span
+                        >
+                      </div>
+                      <div
+                        style="
+                          display: flex;
+                          align-items: center;
+                          gap: 1rem;
+                          flex-wrap: wrap;
+                        "
+                      >
+                        <div>
+                          <div class="stat-label">Cost</div>
+                          <div class="stat-value" :class="tab.id+'-stat'">
+                            10× {{ golems[tab.id][lastGolemIdx(tab.id)].name }}
+                          </div>
+                        </div>
+                        <div class="vdivider"></div>
+                        <div>
+                          <div class="stat-label">
+                            G{{ lastGolemIdx(tab.id)+1 }} Owned
+                          </div>
+                          <div class="stat-value" :class="tab.id+'-stat'">
+                            {{ golems[tab.id][lastGolemIdx(tab.id)].bought }} /
+                            10
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      class="emp-btn"
+                      :class="tab.id+'-emp-btn'"
+                      :disabled="golems[tab.id][lastGolemIdx(tab.id)].bought<10"
+                      @click="buyEmpowerment(tab.id,$event)"
+                    >
+                      Empower<br /><span style="font-size: 0.6rem; opacity: 0.7"
+                        >Costs 10× G{{ lastGolemIdx(tab.id)+1 }}</span
+                      >
+                    </button>
+                  </div>
+                  <div class="prog-wrap">
+                    <div
+                      class="prog-fill"
+                      :style="{width:Math.min(100,(golems[tab.id][lastGolemIdx(tab.id)].bought/10)*100)+'%',background:colors[tab.id]}"
+                    ></div>
+                  </div>
+                </div>
+              </template>
+
+              <!-- ── NORMAL GOLEM ROWS ── -->
+              <template v-else>
+                <!-- Golem rows -->
+                <div style="display: flex; flex-direction: column; gap: 1rem">
+                  <div
+                    v-for="(golem,idx) in visibleGolems(tab.id)"
+                    :key="idx"
+                    class="golem-card"
+                    :class="[tab.id+'-card', automation[tab.id][idx]&&automation[tab.id][idx].on?'auto-active':'']"
+                    style="padding: 1.25rem"
+                  >
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 1rem;
+                        flex-wrap: wrap;
+                      "
+                    >
+                      <!-- Icon -->
+                      <div
+                        class="golem-icon"
+                        :class="tab.id+'-icon'"
+                        style="position: relative"
+                      >
+                        {{ golem.icon }}
+                        <div
+                          v-if="automation[tab.id][idx]&&automation[tab.id][idx].on"
+                          class="auto-dot"
+                          :class="tab.id"
+                          style="position: absolute; bottom: 4px; right: 4px"
+                        ></div>
+                      </div>
+                      <!-- Stats -->
+                      <div style="flex: 1; min-width: 0">
+                        <div
+                          class="golem-name"
+                          :class="tab.id+'-name'"
+                          style="margin-bottom: 0.5rem"
+                        >
+                          {{ golem.name }}
+                        </div>
+                        <div
+                          style="
+                            display: flex;
+                            align-items: center;
+                            gap: 1rem;
+                            flex-wrap: wrap;
+                          "
+                        >
+                          <div>
+                            <div class="stat-label">Cost</div>
+                            <div class="stat-value" :class="tab.id+'-stat'">
+                              <template v-if="idx===0"
+                                >{{ g1Cost(tab.id) }} {{ tab.currSymbol
+                                }}</template
+                              >
+                              <template v-else
+                                >{{ higherCost(tab.id) }}× {{
+                                golems[tab.id][idx-1].name }}</template
+                              >
+                            </div>
+                          </div>
+                          <div class="vdivider"></div>
+                          <div>
+                            <div class="stat-label">Multiplier</div>
+                            <span class="mult-badge" :class="tab.id+'-mult'">
+                              ×{{ effectiveMult(tab.id,golem).toFixed(1) }}
+                              <template v-if="multUpgrades[tab.id]>0"
+                                ><span style="font-size: 0.6rem; opacity: 0.65"
+                                  >(base ×{{ effectiveScale(tab.id,golem)
+                                  }})</span
+                                ></template
+                              >
+                            </span>
+                          </div>
+                          <div class="vdivider"></div>
+                          <div>
+                            <div class="stat-label">Per golem / sec</div>
+                            <div class="stat-value" :class="tab.id+'-stat'">
+                              {{ effectiveMult(tab.id,golem).toFixed(1) }} {{
+                              tab.currSymbol }}
+                            </div>
+                          </div>
+                          <template v-if="golem.bought>0">
+                            <div class="vdivider"></div>
+                            <div>
+                              <div class="stat-label">Total Output</div>
+                              <div class="stat-value" :class="tab.id+'-stat'">
+                                {{
+                                formatNum(golem.bought*effectiveMult(tab.id,golem))
+                                }}/s
+                              </div>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
+                      <!-- Own / Buy -->
+                      <div
+                        style="
+                          display: flex;
+                          align-items: center;
+                          gap: 1rem;
+                          flex-shrink: 0;
+                        "
+                      >
+                        <div style="text-align: center">
+                          <div class="stat-label" style="margin-bottom: 4px">
+                            Owned
+                          </div>
+                          <div class="owned-badge" :class="tab.id+'-badge'">
+                            {{ golem.bought }}
+                          </div>
+                        </div>
+                        <div
+                          style="
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            gap: 4px;
+                          "
+                        >
+                          <button
+                            class="buy-btn"
+                            :class="tab.id+'-btn'"
+                            :disabled="!canAfford(tab.id,idx)"
+                            @click="buyGolem(tab.id,idx,$event)"
+                          >
+                            Buy
+                          </button>
+                          <div
+                            v-if="!canAfford(tab.id,idx)"
+                            style="
+                              font-size: 0.58rem;
+                              color: #4a4038;
+                              text-align: center;
+                              max-width: 84px;
+                              line-height: 1.3;
+                            "
+                          >
+                            <template
+                              v-if="idx===0&&totalOwned(tab.id)>=golemCap(tab.id)"
+                              >Cap full</template
+                            >
+                            <template v-else-if="idx===0"
+                              >Need {{ g1Cost(tab.id) }} {{ tab.label
+                              }}</template
+                            >
+                            <template v-else
+                              >Need {{ higherCost(tab.id) }}× G{{ idx
+                              }}</template
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Automation -->
+                    <div class="auto-panel">
+                      <span class="auto-panel-label">Automation</span>
+                      <template v-if="!automation[tab.id][idx].purchased">
+                        <button
+                          class="auto-buy-btn"
+                          :class="tab.id+'-auto-buy'"
+                          :disabled="currency[tab.id]<automationCost(idx)"
+                          @click="purchaseAutomation(tab.id,idx,$event)"
+                        >
+                          Unlock Auto · {{ formatNum(automationCost(idx)) }} {{
+                          tab.currSymbol }}
+                        </button>
+                        <div style="flex: 1"></div>
+                        <div
+                          style="display: flex; align-items: center; gap: 6px"
+                        >
+                          <div
+                            style="
+                              width: 80px;
+                              height: 4px;
+                              background: rgba(255, 255, 255, 0.06);
+                              border-radius: 2px;
+                              overflow: hidden;
+                            "
+                          >
+                            <div
+                              :style="{width:Math.min(100,(currency[tab.id]/automationCost(idx))*100)+'%',height:'100%',borderRadius:'2px',background:colors[tab.id],transition:'width 0.4s'}"
+                            ></div>
+                          </div>
+                          <span style="font-size: 0.62rem; color: #484038"
+                            >{{
+                            Math.min(100,Math.floor((currency[tab.id]/automationCost(idx))*100))
+                            }}%</span
+                          >
+                        </div>
+                      </template>
+                      <template v-else>
+                        <div
+                          class="toggle-wrap"
+                          @click="toggleAutomation(tab.id,idx)"
+                        >
+                          <div
+                            class="toggle-track"
+                            :class="automation[tab.id][idx].on?'on-'+tab.id:''"
+                          >
+                            <div
+                              class="toggle-thumb"
+                              :class="automation[tab.id][idx].on?'on':''"
+                            ></div>
+                          </div>
+                          <span
+                            class="toggle-label"
+                            :class="automation[tab.id][idx].on?'on-'+tab.id:''"
+                            >{{ automation[tab.id][idx].on?'Auto: ON':'Auto:
+                            OFF' }}</span
+                          >
+                        </div>
+                        <div
+                          v-if="automation[tab.id][idx].on"
+                          style="
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                            margin-left: 4px;
+                          "
+                        >
+                          <div class="auto-dot" :class="tab.id"></div>
+                          <span style="font-size: 0.62rem; color: #484038"
+                            >Buying when able · 1×/sec</span
+                          >
+                        </div>
+                        <div style="flex: 1"></div>
+                        <span
+                          style="
+                            font-size: 0.62rem;
+                            color: #3a3530;
+                            letter-spacing: 0.06em;
+                          "
+                          >PURCHASED</span
+                        >
+                      </template>
+                    </div>
+
+                    <div class="prog-wrap">
+                      <div
+                        class="prog-fill"
+                        :style="{width:Math.min(100,getProgress(tab.id,idx))+'%',background:colors[tab.id]}"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Empowerment -->
+                <div class="emp-divider">
+                  <div class="emp-divider-line"></div>
+                  <span class="emp-divider-text">⬆ Golem Empowerment</span>
+                  <div class="emp-divider-line"></div>
+                </div>
+                <div
+                  class="emp-card"
+                  :class="tab.id+'-emp'"
+                  style="padding: 1.25rem"
+                >
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 1rem;
+                      flex-wrap: wrap;
+                    "
+                  >
+                    <div class="emp-icon" :class="tab.id+'-emp-icon'">⬆️</div>
+                    <div style="flex: 1; min-width: 0">
+                      <div
+                        class="golem-name"
+                        :class="tab.id+'-name'"
+                        style="margin-bottom: 0.5rem"
+                      >
+                        {{ tab.label }} Empowerment
+                        <span
+                          v-if="multUpgrades[tab.id]>0"
+                          style="
+                            font-size: 0.72rem;
+                            margin-left: 8px;
+                            font-family: &quot;Share Tech Mono&quot;;
+                          "
+                          >(×{{ multUpgrades[tab.id] }} purchased)</span
+                        >
+                      </div>
+                      <div
+                        style="
+                          display: flex;
+                          align-items: center;
+                          gap: 1rem;
+                          flex-wrap: wrap;
+                        "
+                      >
+                        <div>
+                          <div class="stat-label">Cost</div>
+                          <div class="stat-value" :class="tab.id+'-stat'">
+                            10× {{ golems[tab.id][lastGolemIdx(tab.id)].name }}
+                          </div>
+                        </div>
+                        <div class="vdivider"></div>
+                        <div>
+                          <div class="stat-label">Effect</div>
+                          <div class="stat-value" :class="tab.id+'-stat'">
+                            +0.2 to base · scales with tier
+                          </div>
+                        </div>
+                        <div class="vdivider"></div>
+                        <div>
+                          <div class="stat-label">
+                            G{{ lastGolemIdx(tab.id)+1 }} Owned
+                          </div>
+                          <div class="stat-value" :class="tab.id+'-stat'">
+                            {{ golems[tab.id][lastGolemIdx(tab.id)].bought }} /
+                            10
+                          </div>
+                        </div>
+                        <template v-if="multUpgrades[tab.id]>0">
+                          <div class="vdivider"></div>
+                          <div>
+                            <div class="stat-label">Bonus Active</div>
+                            <div class="bonus-stack">
+                              <span
+                                class="bonus-chip"
+                                :class="tab.id+'-bonus-chip'"
+                                >base ×{{
+                                (1+multUpgrades[tab.id]*MULT_BONUS).toFixed(1)
+                                }}</span
+                              >
+                              <span
+                                v-for="g in visibleGolems(tab.id)"
+                                :key="g.name"
+                                class="bonus-chip"
+                                :class="tab.id+'-bonus-chip'"
+                                style="opacity: 0.6; font-size: 0.58rem"
+                              >
+                                G{{ golems[tab.id].indexOf(g)+1 }}→×{{
+                                effectiveMult(tab.id,g).toFixed(1) }}
+                              </span>
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 4px;
+                        flex-shrink: 0;
+                      "
+                    >
+                      <button
+                        class="emp-btn"
+                        :class="tab.id+'-emp-btn'"
+                        :disabled="golems[tab.id][lastGolemIdx(tab.id)].bought<10"
+                        @click="buyEmpowerment(tab.id,$event)"
+                      >
+                        Empower<br /><span
+                          style="font-size: 0.6rem; opacity: 0.7"
+                          >Costs 10× G{{ lastGolemIdx(tab.id)+1 }}</span
+                        >
+                      </button>
+                      <div
+                        v-if="golems[tab.id][lastGolemIdx(tab.id)].bought<10"
+                        style="
+                          font-size: 0.58rem;
+                          color: #4a4038;
+                          text-align: center;
+                        "
+                      >
+                        Need 10× G{{ lastGolemIdx(tab.id)+1 }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="prog-wrap">
+                    <div
+                      class="prog-fill"
+                      :style="{width:Math.min(100,(golems[tab.id][lastGolemIdx(tab.id)].bought/10)*100)+'%',background:colors[tab.id]}"
+                    ></div>
+                  </div>
+                </div>
+
+                <!-- Zenith button -->
+                <div
+                  v-if="canActivateZenith(tab.id)"
+                  style="margin-top: 1.5rem; text-align: center"
+                >
+                  <button
+                    class="zenith-activate-btn"
+                    :class="tab.id+'-zenith-btn'"
+                    @click="activateZenith(tab.id)"
+                  >
+                    ✦ Create {{ tab.label }} Golem Zenith ✦
+                  </button>
+                  <div
+                    style="
+                      font-size: 0.62rem;
+                      color: #4a4038;
+                      margin-top: 8px;
+                      letter-spacing: 0.08em;
+                    "
+                  >
+                    All {{ fifthUnlocked[tab.id]?5:fourthUnlocked[tab.id]?4:3 }}
+                    tiers at 20 golems — ascend to unified form
+                  </div>
+                </div> </template
+              ><!-- /v-else normal view -->
+            </template>
+          </div>
+        </div>
+        <!-- /golems -->
+
+        <!-- ═══ UPGRADES ═══ -->
+        <div v-if="mainTab==='upgrades'">
+          <div class="ornament">
+            <div class="ornament-line upg-ol"></div>
+            <span
+              style="
+                font-family: &quot;Cinzel&quot;, serif;
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+                font-size: 0.78rem;
+                color: #80a858;
+              "
+              >✦ Global Upgrades</span
+            >
+            <div class="ornament-line upg-ol rev"></div>
+          </div>
+          <div
+            style="
+              font-size: 0.72rem;
+              color: #38362e;
+              text-align: center;
+              margin-bottom: 0.5rem;
+            "
+          >
+            Upgrades apply per material. Higher tiers must be unlocked in order.
+          </div>
+
+          <!-- Cap Upgrades -->
+          <div class="upg-section-label">📦 Golem Capacity</div>
+          <div
+            v-for="mat in ['stone','metal','gem']"
+            :key="'cap-'+mat"
+            class="upg-card"
+            :class="capUpgrades[mat]>=MAX_CAP_UPGRADES?'upg-done':''"
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+              "
+            >
+              <div class="upg-icon">
+                {{ mat==='stone'?'🪨':mat==='metal'?'⚙️':'💎' }}
+              </div>
+              <div style="flex: 1; min-width: 0">
+                <div class="upg-name">
+                  {{ cap(mat) }} Capacity
+                  <span
+                    v-if="capUpgrades[mat]>=MAX_CAP_UPGRADES"
+                    style="color: #60883a; font-size: 0.75rem"
+                  >
+                    ✓ Maxed</span
+                  >
+                </div>
+                <div class="upg-desc">
+                  Expand the max {{ mat }} golem count by +5. Current cap:
+                  <span :class="mat+'-stat'">{{ golemCap(mat) }}</span> / {{ 20
+                  + MAX_CAP_UPGRADES * 5 }} max
+                </div>
+                <div class="upg-cost" v-if="capUpgrades[mat]<MAX_CAP_UPGRADES">
+                  Cost: {{ formatNum(capCost(mat)) }} {{
+                  mat==='stone'?'🪨':mat==='metal'?'⚙️':'💎' }}
+                </div>
+                <div class="upg-warn">
+                  Purchased {{ capUpgrades[mat] }} / {{ MAX_CAP_UPGRADES }} ·
+                  starts at 5,000 · doubles each buy
+                </div>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  gap: 4px;
+                  flex-shrink: 0;
+                "
+              >
+                <span
+                  v-if="capUpgrades[mat]>=MAX_CAP_UPGRADES"
+                  class="upg-done-badge"
+                  >Max Reached</span
+                >
+                <template v-else>
+                  <button
+                    class="upg-btn"
+                    :disabled="currency[mat]<capCost(mat)"
+                    @click="buyCapUpgrade(mat,$event)"
+                  >
+                    +5 Cap
+                  </button>
+                  <div
+                    v-if="currency[mat]<capCost(mat)"
+                    style="
+                      font-size: 0.56rem;
+                      color: #4a4038;
+                      text-align: center;
+                    "
+                  >
+                    Need {{ formatNum(capCost(mat)) }}
+                  </div>
+                </template>
+              </div>
+            </div>
+            <div v-if="capUpgrades[mat]<MAX_CAP_UPGRADES" class="prog-wrap">
+              <div
+                class="prog-fill"
+                :style="{width:Math.min(100,(currency[mat]/capCost(mat))*100)+'%',background:colors[mat]}"
+              ></div>
+            </div>
+            <div v-else class="prog-wrap">
+              <div
+                class="prog-fill"
+                style="width: 100%; background: #60883a"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Fourth Golem Upgrade -->
+          <div class="upg-section-label">🌋 Fourth Golem Tier</div>
+          <div
+            v-for="mat in ['stone','metal','gem']"
+            :key="'g4-'+mat"
+            class="upg-card"
+            :class="fourthUnlocked[mat]?'upg-done':''"
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+              "
+            >
+              <div class="upg-icon">
+                {{ mat==='stone'?'🌋':mat==='metal'?'🦾':'🌟' }}
+              </div>
+              <div style="flex: 1; min-width: 0">
+                <div class="upg-name">{{ cap(mat) }} Golem IV Unlock</div>
+                <div class="upg-desc">
+                  Unlock a 4th {{ mat }} golem tier with ×8 scale (or ×27 with
+                  Overdrive). One-time purchase.
+                  <span v-if="fourthUnlocked[mat]" style="color: #60883a">
+                    ✓ Unlocked!</span
+                  >
+                </div>
+                <div v-if="!fourthUnlocked[mat]" class="upg-cost">
+                  Cost: 10,000 {{ mat==='stone'?'🪨':mat==='metal'?'⚙️':'💎' }}
+                </div>
+              </div>
+              <div style="flex-shrink: 0">
+                <span v-if="fourthUnlocked[mat]" class="upg-done-badge"
+                  >✓ Purchased</span
+                >
+                <button
+                  v-else
+                  class="upg-btn"
+                  :disabled="currency[mat]<10000"
+                  @click="buyFourthGolem(mat,$event)"
+                >
+                  Unlock
+                </button>
+              </div>
+            </div>
+            <div v-if="!fourthUnlocked[mat]" class="prog-wrap">
+              <div
+                class="prog-fill"
+                :style="{width:Math.min(100,(currency[mat]/10000)*100)+'%',background:colors[mat]}"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Fifth Golem Upgrade -->
+          <div class="upg-section-label">👑 Fifth Golem Tier</div>
+          <div
+            v-for="mat in ['stone','metal','gem']"
+            :key="'g5-'+mat"
+            class="upg-card"
+            :class="fifthUnlocked[mat]?'upg-done':(!fourthUnlocked[mat]?'upg-done':'')"
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+              "
+            >
+              <div class="upg-icon">
+                {{ mat==='stone'?'🌍':mat==='metal'?'🛸':'🌌' }}
+              </div>
+              <div style="flex: 1; min-width: 0">
+                <div class="upg-name">{{ cap(mat) }} Golem V Unlock</div>
+                <div class="upg-desc">
+                  Unlock a 5th {{ mat }} golem tier with ×16 scale (or ×81 with
+                  Overdrive). Requires Golem IV first.
+                  <span v-if="!fourthUnlocked[mat]" style="color: #6a5030">
+                    ⚠ Requires Golem IV.</span
+                  >
+                  <span v-else-if="fifthUnlocked[mat]" style="color: #60883a">
+                    ✓ Unlocked!</span
+                  >
+                </div>
+                <div
+                  v-if="!fifthUnlocked[mat]&&fourthUnlocked[mat]"
+                  class="upg-cost"
+                >
+                  Cost: 20,000 {{ mat==='stone'?'🪨':mat==='metal'?'⚙️':'💎' }}
+                </div>
+              </div>
+              <div style="flex-shrink: 0">
+                <span v-if="fifthUnlocked[mat]" class="upg-done-badge"
+                  >✓ Purchased</span
+                >
+                <button
+                  v-else
+                  class="upg-btn"
+                  :disabled="!fourthUnlocked[mat]||currency[mat]<20000"
+                  @click="buyFifthGolem(mat,$event)"
+                >
+                  Unlock
+                </button>
+              </div>
+            </div>
+            <div
+              v-if="!fifthUnlocked[mat]&&fourthUnlocked[mat]"
+              class="prog-wrap"
+            >
+              <div
+                class="prog-fill"
+                :style="{width:Math.min(100,(currency[mat]/20000)*100)+'%',background:colors[mat]}"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Overdrive Upgrades -->
+          <div class="upg-section-label">⚡ Overdrive Protocol</div>
+          <div
+            v-for="mat in ['stone','metal','gem']"
+            :key="'od-'+mat"
+            class="upg-card"
+            :class="overdriveOn[mat]?'upg-done':''"
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+              "
+            >
+              <div
+                class="upg-icon"
+                style="
+                  background: rgba(200, 160, 40, 0.08);
+                  border-color: rgba(200, 160, 40, 0.2);
+                "
+              >
+                ⚡
+              </div>
+              <div style="flex: 1; min-width: 0">
+                <div class="upg-name" style="color: #c8b860">
+                  {{ cap(mat) }} Overdrive
+                </div>
+                <div class="upg-desc">
+                  Changes the tier scale base from ×2 to ×3: G1=×1, G2=×3,
+                  G3=×9, G4=×27{{ fifthUnlocked[mat]?', G5=×81':'' }}.
+                  Dramatically boosts output.<br />
+                  <span style="color: #786848"
+                    >⚠ Trade-off: G1 cost rises from 10→15, all upper tiers cost
+                    4× previous instead of 3×.</span
+                  >
+                  <span v-if="overdriveOn[mat]" style="color: #c0a828">
+                    ✓ Active!</span
+                  >
+                </div>
+                <div v-if="!overdriveOn[mat]" class="upg-cost">
+                  Cost: 10,000 {{ mat==='stone'?'🪨':mat==='metal'?'⚙️':'💎' }}
+                </div>
+              </div>
+              <div style="flex-shrink: 0">
+                <span
+                  v-if="overdriveOn[mat]"
+                  class="upg-done-badge upg-overdrive-badge"
+                  >⚡ Active</span
+                >
+                <button
+                  v-else
+                  class="upg-btn"
+                  :disabled="currency[mat]<10000"
+                  @click="buyOverdrive(mat,$event)"
+                >
+                  Activate
+                </button>
+              </div>
+            </div>
+            <div v-if="!overdriveOn[mat]" class="prog-wrap">
+              <div
+                class="prog-fill"
+                :style="{width:Math.min(100,(currency[mat]/10000)*100)+'%',background:colors[mat]}"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <!-- /upgrades -->
+
+        <!-- ═══ OPTIONS ═══ -->
+        <div v-if="mainTab==='options'">
+          <div class="ornament">
+            <div class="ornament-line opt-ol"></div>
+            <span
+              style="
+                font-family: &quot;Cinzel&quot;, serif;
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+                font-size: 0.78rem;
+                color: #6878a0;
+              "
+              >⚙ Options</span
+            >
+            <div class="ornament-line opt-ol rev"></div>
+          </div>
+
+          <div class="opt-card">
+            <div class="opt-title">Save & Progress</div>
+            <div
+              style="
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+                align-items: center;
+              "
+            >
+              <button class="opt-btn opt-save" @click="saveGame()">
+                💾 Save Game
+              </button>
+              <button class="opt-btn opt-reset" @click="resetGame()">
+                🗑 Reset Game
+              </button>
+              <transition name="fade">
+                <span
+                  v-if="saveStatus"
+                  :style="{fontSize:'0.65rem',letterSpacing:'0.1em',textTransform:'uppercase',padding:'6px 14px',borderRadius:'6px',background:saveStatus==='saved'?'rgba(60,120,60,0.2)':saveStatus==='loaded'?'rgba(60,80,140,0.2)':'rgba(140,60,60,0.2)',color:saveStatus==='saved'?'#80c880':saveStatus==='loaded'?'#80a0e8':'#e08080',border:'1px solid '+(saveStatus==='saved'?'rgba(80,160,80,0.3)':saveStatus==='loaded'?'rgba(80,100,180,0.3)':'rgba(160,80,80,0.3)'),whiteSpace:'nowrap'}"
+                >
+                  {{ saveStatus==='saved'?'✓ Saved':saveStatus==='loaded'?'↑
+                  Loaded':saveStatus==='reset'?'✕ Reset':'! Error' }}
+                </span>
+              </transition>
+            </div>
+            <div
+              style="
+                margin-top: 1rem;
+                font-size: 0.72rem;
+                color: #353030;
+                line-height: 1.8;
+              "
+            >
+              Auto-saves every 5 seconds and on page close.<br />
+              Data is stored in your browser's localStorage.<br />
+              <span style="color: #3a2a20"
+                >Clearing browser data will erase your save.</span
+              >
+            </div>
+          </div>
+
+          <div class="opt-card">
+            <div class="opt-title">Current Stats</div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 1.25rem;
+              "
+            >
+              <div v-for="mat in ['stone','metal','gem']" :key="'stat-'+mat">
+                <div class="stat-label" style="margin-bottom: 6px">
+                  {{ cap(mat) }}
+                </div>
+                <div style="font-size: 0.82rem" :class="mat+'-stat'">
+                  {{ formatNum(currency[mat]) }} stored
+                </div>
+                <div style="font-size: 0.72rem; color: #484038">
+                  +{{ formatNum(totalIncome(mat)) }}/s income
+                </div>
+                <div style="font-size: 0.72rem; color: #484038">
+                  {{ totalOwned(mat) }} / {{ golemCap(mat) }} golems
+                </div>
+                <div
+                  v-if="overdriveOn[mat]"
+                  style="font-size: 0.64rem; color: #b09030; margin-top: 3px"
+                >
+                  ⚡ Overdrive Active
+                </div>
+                <div
+                  v-if="fourthUnlocked[mat]"
+                  style="font-size: 0.64rem; color: #609040; margin-top: 1px"
+                >
+                  🌋 Golem IV Unlocked
+                </div>
+                <div
+                  v-if="fifthUnlocked[mat]"
+                  style="font-size: 0.64rem; color: #609040; margin-top: 1px"
+                >
+                  👑 Golem V Unlocked
                 </div>
               </div>
             </div>
-
-            <!-- ── Automation panel ── -->
-            <div class="auto-panel">
-              <span class="auto-panel-label">Automation</span>
-
-              <!-- Not purchased yet: show buy button -->
-              <template v-if="!automation[tab.id][idx].purchased">
-                <button class="auto-buy-btn" :class="tab.id + '-auto-buy'"
-                  :disabled="currency[tab.id] < automationCost(idx)"
-                  @click="purchaseAutomation(tab.id, idx, $event)">
-                  Unlock Auto · {{ formatNum(automationCost(idx)) }} {{ tab.currSymbol }}
-                </button>
-                <div style="flex:1;"></div>
-                <!-- Progress toward auto cost -->
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <div style="width:80px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;">
-                    <div :style="{
-                      width: Math.min(100, (currency[tab.id] / automationCost(idx)) * 100) + '%',
-                      height:'100%', borderRadius:'2px',
-                      background: colors[tab.id], transition:'width 0.4s'
-                    }"></div>
-                  </div>
-                  <span style="font-size:0.62rem;color:#484038;">{{ Math.min(100, Math.floor((currency[tab.id] / automationCost(idx)) * 100)) }}%</span>
-                </div>
-              </template>
-
-              <!-- Purchased: show toggle -->
-              <template v-else>
-                <div class="toggle-wrap" @click="toggleAutomation(tab.id, idx)">
-                  <div class="toggle-track" :class="automation[tab.id][idx].on ? 'on-' + tab.id : ''">
-                    <div class="toggle-thumb" :class="automation[tab.id][idx].on ? 'on' : ''"></div>
-                  </div>
-                  <span class="toggle-label" :class="automation[tab.id][idx].on ? 'on-' + tab.id : ''">
-                    {{ automation[tab.id][idx].on ? 'Auto: ON' : 'Auto: OFF' }}
-                  </span>
-                </div>
-                <div v-if="automation[tab.id][idx].on" style="display:flex;align-items:center;gap:6px;margin-left:4px;">
-                  <div class="auto-dot" :class="tab.id"></div>
-                  <span style="font-size:0.62rem;color:#484038;">Buying when able · 1×/sec</span>
-                </div>
-                <div style="flex:1;"></div>
-                <span style="font-size:0.62rem;color:#3a3530;letter-spacing:0.06em;">PURCHASED</span>
-              </template>
-            </div>
-
-            <!-- Affordability progress bar -->
-            <div class="prog-wrap">
-              <div class="prog-fill" :style="{ width: Math.min(100, getProgress(tab.id, idx)) + '%', background: colors[tab.id] }"></div>
-            </div>
-
           </div>
         </div>
-
-        <!-- Income footer -->
-        <div style="margin-top:1.5rem;text-align:center;font-size:0.7rem;letter-spacing:0.08em;color:#302c28;">
-          TOTAL {{ tab.label.toUpperCase() }} INCOME:
-          <span :class="tab.id + '-stat'">{{ formatNum(totalIncome(tab.id)) }}/s</span>
-        </div>
-
-      </template>
+        <!-- /options -->
+      </div>
+      <!-- /content -->
     </div>
-  </div>
-</div>
 
-<script>
-const { createApp, ref, reactive, onMounted, onUnmounted } = Vue;
+    <script>
+      const { createApp, ref, reactive, onMounted, onUnmounted } = Vue;
+      createApp({
+        setup() {
+          const mainTab = ref("golems");
+          const activeTab = ref("stone");
 
-createApp({
-  setup() {
-    const activeTab = ref('stone');
-    const GOLEM_CAP = 20;
+          const materialTabs = [
+            { id: "stone", label: "Stone", icon: "🪨", currSymbol: "🪨" },
+            { id: "metal", label: "Metal", icon: "⚙️", currSymbol: "⚙️" },
+            { id: "gem", label: "Gem", icon: "💎", currSymbol: "💎" },
+          ];
+          const colors = { stone: "#a8956a", metal: "#7ab3c8", gem: "#9b6fbf" };
 
-    const tabs = [
-      { id: 'stone', label: 'Stone', icon: '🪨', currSymbol: '🪨' },
-      { id: 'metal', label: 'Metal', icon: '⚙️', currSymbol: '⚙️' },
-      { id: 'gem',   label: 'Gem',   icon: '💎', currSymbol: '💎' },
-    ];
+          const BASE_CAP = 20;
+          const MAX_CAP_UPGRADES = 80;
+          const MULT_BONUS = 0.2;
 
-    const colors = { stone: '#a8956a', metal: '#7ab3c8', gem: '#9b6fbf' };
+          const currency = reactive({ stone: 10, metal: 0, gem: 0 });
+          const unlocked = reactive({ stone: true, metal: false, gem: false });
 
-    const currency = reactive({ stone: 10, metal: 0, gem: 0 });
+          // Golem definitions — scalePos is 0-indexed tier (0,1,2,3,4)
+          const golemDefs = {
+            stone: [
+              { name: "Stone Golem 1", icon: "🗿", scalePos: 0 },
+              { name: "Stone Golem 2", icon: "🏔️", scalePos: 1 },
+              { name: "Stone Golem 3", icon: "🪨", scalePos: 2 },
+              { name: "Stone Golem 4", icon: "🌋", scalePos: 3 },
+              { name: "Stone Golem 5", icon: "🌍", scalePos: 4 },
+            ],
+            metal: [
+              { name: "Metal Golem 1", icon: "⚙️", scalePos: 0 },
+              { name: "Metal Golem 2", icon: "🔩", scalePos: 1 },
+              { name: "Metal Golem 3", icon: "🤖", scalePos: 2 },
+              { name: "Metal Golem 4", icon: "🦾", scalePos: 3 },
+              { name: "Metal Golem 5", icon: "🛸", scalePos: 4 },
+            ],
+            gem: [
+              { name: "Gem Golem 1", icon: "💎", scalePos: 0 },
+              { name: "Gem Golem 2", icon: "🔮", scalePos: 1 },
+              { name: "Gem Golem 3", icon: "✨", scalePos: 2 },
+              { name: "Gem Golem 4", icon: "🌟", scalePos: 3 },
+              { name: "Gem Golem 5", icon: "🌌", scalePos: 4 },
+            ],
+          };
 
-    /*
-      Golem economy:
-      ─────────────────────────────────────────────────────────
-      All golems generate their own tab's currency.
-      G1: cost 10 currency, mult ×1 → 1/s each
-      G2: cost 3× G1 (consume 3 G1s), mult ×2 → 2/s each
-      G3: cost 3× G2 (consume 3 G2s), mult ×4 → 4/s each
-      CAP: 20 total golems per tab.
+          const golems = reactive({
+            stone: golemDefs.stone.map((d) => ({ ...d, bought: 0 })),
+            metal: golemDefs.metal.map((d) => ({ ...d, bought: 0 })),
+            gem: golemDefs.gem.map((d) => ({ ...d, bought: 0 })),
+          });
 
-      Tab unlock: metal needs 5,000 stone; gem needs 5,000 metal.
-      On unlock: 5,000 prev resource is deducted, and player receives 1 free G1.
+          const mkAuto = () =>
+            Array.from({ length: 5 }, () => ({ purchased: false, on: false }));
+          const automation = reactive({
+            stone: mkAuto(),
+            metal: mkAuto(),
+            gem: mkAuto(),
+          });
 
-      Automation costs: 5^(2 + golemNumber)
-        G1 → 5^3 = 125
-        G2 → 5^4 = 625
-        G3 → 5^5 = 3125
-      Automation paid in the tab's own currency.
-      When toggled ON: once per second, buys as many of that golem as possible.
-    */
+          const multUpgrades = reactive({ stone: 0, metal: 0, gem: 0 });
+          const capUpgrades = reactive({ stone: 0, metal: 0, gem: 0 });
+          const fourthUnlocked = reactive({
+            stone: false,
+            metal: false,
+            gem: false,
+          });
+          const fifthUnlocked = reactive({
+            stone: false,
+            metal: false,
+            gem: false,
+          });
+          const overdriveOn = reactive({
+            stone: false,
+            metal: false,
+            gem: false,
+          });
+          // zeniths: visual-only collapse when all unlocked tiers are at cap (20 each)
+          const zeniths = reactive({ stone: false, metal: false, gem: false });
 
-    const defs = {
-      stone: [
-        { name: 'Stone Golem 1', icon: '🗿', baseCost: 10, multiplier: 1 },
-        { name: 'Stone Golem 2', icon: '🏔️', baseCost: 3,  multiplier: 2 },
-        { name: 'Stone Golem 3', icon: '🪨', baseCost: 3,  multiplier: 4 },
-        { name: 'Stone Golem 4', icon: '🌋', baseCost: 3,  multiplier: 8 },
-      ],
-      metal: [
-        { name: 'Metal Golem 1', icon: '⚙️', baseCost: 10, multiplier: 1 },
-        { name: 'Metal Golem 2', icon: '🔩', baseCost: 3,  multiplier: 2 },
-        { name: 'Metal Golem 3', icon: '🤖', baseCost: 3,  multiplier: 4 },
-        { name: 'Metal Golem 4', icon: '🦾', baseCost: 3,  multiplier: 8 },
-      ],
-      gem: [
-        { name: 'Gem Golem 1', icon: '💎', baseCost: 10, multiplier: 1 },
-        { name: 'Gem Golem 2', icon: '🔮', baseCost: 3,  multiplier: 2 },
-        { name: 'Gem Golem 3', icon: '✨', baseCost: 3,  multiplier: 4 },
-        { name: 'Gem Golem 4', icon: '🌟', baseCost: 3,  multiplier: 8 },
-      ],
-    };
+          /* ── Derived ── */
 
-    const golems = reactive({
-      stone: defs.stone.map(d => ({ ...d, bought: 0 })),
-      metal: defs.metal.map(d => ({ ...d, bought: 0 })),
-      gem:   defs.gem.map(d => ({ ...d, bought: 0 })),
-    });
-
-    const unlocked = reactive({ stone: true, metal: false, gem: false });
-
-    // Automation state per tab × golem
-    // purchased: player has paid the one-time cost
-    // on: toggle is enabled
-    const automation = reactive({
-      stone: [
-        { purchased: false, on: false },
-        { purchased: false, on: false },
-        { purchased: false, on: false },
-        { purchased: false, on: false },
-      ],
-      metal: [
-        { purchased: false, on: false },
-        { purchased: false, on: false },
-        { purchased: false, on: false },
-        { purchased: false, on: false },
-      ],
-      gem: [
-        { purchased: false, on: false },
-        { purchased: false, on: false },
-        { purchased: false, on: false },
-        { purchased: false, on: false },
-      ],
-    });
-
-    /* ── Pure helpers ── */
-
-    function formatNum(n) {
-      n = Math.floor(n);
-      if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';
-      if (n >= 1e6) return (n / 1e6).toFixed(2) + 'M';
-      if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
-      return n.toString();
-    }
-
-    // golemNumber is 1-indexed (G1=1, G2=2, G3=3, G4=4), idx is 0-indexed
-    function automationCost(idx) {
-      return Math.pow(3, 2 + (idx + 1)); // 3^3=27, 3^4=81, 3^5=243, 3^6=729
-    }
-
-    function totalOwned(tabId) {
-      return golems[tabId].reduce((s, g) => s + g.bought, 0);
-    }
-
-    function totalIncome(tabId) {
-      return golems[tabId].reduce((s, g) => s + g.bought * g.multiplier, 0);
-    }
-
-    function prevTabColor(tabId) {
-      return tabId === 'metal' ? 'stone-stat' : 'metal-stat';
-    }
-
-    function canAfford(tabId, idx) {
-      if (!unlocked[tabId]) return false;
-      if (idx === 0) {
-        return totalOwned(tabId) < GOLEM_CAP && currency[tabId] >= golems[tabId][0].baseCost;
-      }
-      return golems[tabId][idx - 1].bought >= 3;
-    }
-
-    function getProgress(tabId, idx) {
-      if (!unlocked[tabId]) return 0;
-      if (idx === 0) {
-        if (totalOwned(tabId) >= GOLEM_CAP) return 100; // full → show full red bar
-        return Math.min(100, (currency[tabId] / golems[tabId][0].baseCost) * 100);
-      }
-      return Math.min(100, (golems[tabId][idx - 1].bought / 3) * 100);
-    }
-
-    /* ── Buy golem (manual) ── */
-    function buyGolem(tabId, idx, event) {
-      if (!canAfford(tabId, idx)) return;
-      _doBuy(tabId, idx);
-      if (event) spawnParticle(event, golems[tabId][idx].icon);
-    }
-
-    /* ── Internal buy without event (used by automation) ── */
-    function _doBy(tabId, idx) {
-      _doBy; // silence linter
-    }
-    function _doBy(tabId, idx) {} // placeholder — using _doActualBuy below
-
-    function _doActualBuy(tabId, idx) {
-      if (idx === 0) {
-        currency[tabId] -= golems[tabId][0].baseCost;
-      } else {
-        golems[tabId][idx - 1].bought -= 3;
-      }
-      golems[tabId][idx].bought++;
-    }
-
-    // Rewrite buyGolem to use shared internal
-    function buyGolem(tabId, idx, event) {
-      if (!canAfford(tabId, idx)) return;
-      _doActualBuy(tabId, idx);
-      if (event) spawnParticle(event, golems[tabId][idx].icon);
-    }
-
-    /* ── Purchase automation ── */
-    function purchaseAutomation(tabId, idx, event) {
-      const cost = automationCost(idx);
-      if (currency[tabId] < cost) return;
-      currency[tabId] -= cost;
-      automation[tabId][idx].purchased = true;
-      if (event) spawnParticle(event, '⚡');
-    }
-
-    function toggleAutomation(tabId, idx) {
-      if (!automation[tabId][idx].purchased) return;
-      automation[tabId][idx].on = !automation[tabId][idx].on;
-    }
-
-    /* ── Spawn particle ── */
-    function spawnParticle(event, icon) {
-      const rect = event.currentTarget.getBoundingClientRect();
-      const p = document.createElement('div');
-      p.className = 'float-particle';
-      p.textContent = icon;
-      p.style.left = (rect.left + rect.width / 2 - 12) + 'px';
-      p.style.top  = (rect.top - 10) + 'px';
-      document.body.appendChild(p);
-      p.addEventListener('animationend', () => p.remove());
-    }
-
-    /* ── Unlock a tab: deduct cost, give 1 free G1 ── */
-    function doUnlock(tabId) {
-      const prevCurr = tabId === 'metal' ? 'stone' : 'metal';
-      currency[prevCurr] -= 5000;
-      unlocked[tabId] = true;
-      golems[tabId][0].bought += 1; // free G1 on unlock
-    }
-
-    /* ── Main tick: 100ms ── */
-    const TICK = 0.1;
-    let autoTimer = 0; // accumulates time toward 1-second automation pulse
-
-    function tick() {
-      // Check unlock conditions
-      if (!unlocked.metal && currency.stone >= 5000) doUnlock('metal');
-      if (!unlocked.gem   && currency.metal >= 5000) doUnlock('gem');
-
-      // Income
-      ['stone', 'metal', 'gem'].forEach(mat => {
-        if (!unlocked[mat]) return;
-        const gs = golems[mat];
-        currency[mat] += (
-          gs[0].bought * gs[0].multiplier +
-          gs[1].bought * gs[1].multiplier +
-          gs[2].bought * gs[2].multiplier +
-          gs[3].bought * gs[3].multiplier
-        ) * TICK;
-      });
-
-      // Automation pulse: once per second
-      autoTimer += TICK;
-      if (autoTimer >= 1.0) {
-        autoTimer -= 1.0;
-        runAutomation();
-      }
-    }
-
-    /* ── Automation pulse: buy as many as possible for each enabled golem ── */
-    function runAutomation() {
-      ['stone', 'metal', 'gem'].forEach(mat => {
-        if (!unlocked[mat]) return;
-        golems[mat].forEach((golem, idx) => {
-          if (!automation[mat][idx].on) return;
-          // Buy as many times as possible in one pulse
-          let safety = 200; // prevent infinite loop edge cases
-          while (canAfford(mat, idx) && safety-- > 0) {
-            _doActualBuy(mat, idx);
+          function golemCap(mat) {
+            return BASE_CAP + capUpgrades[mat] * 5;
           }
-        });
-      });
-    }
+          function capCost(mat) {
+            return Math.floor(5000 * Math.pow(2, capUpgrades[mat]));
+          }
 
-    let ticker;
-    onMounted(() => { ticker = setInterval(tick, 100); });
-    onUnmounted(() => clearInterval(ticker));
+          function g1Cost(mat) {
+            return overdriveOn[mat] ? 15 : 10;
+          }
+          function higherCost(mat) {
+            return overdriveOn[mat] ? 4 : 3;
+          }
 
-    return {
-      activeTab, tabs, colors, GOLEM_CAP,
-      currency, golems, unlocked, automation,
-      formatNum, automationCost,
-      totalOwned, totalIncome,
-      prevTabColor,
-      canAfford, getProgress,
-      buyGolem,
-      purchaseAutomation, toggleAutomation,
-    };
-  }
-}).mount('#app');
-</script>
-</body>
+          // Effective scale factor for a golem given current overdrive state
+          function effectiveScale(mat, golem) {
+            const pos = golem.scalePos; // 0=G1, 1=G2, ...
+            return overdriveOn[mat] ? Math.pow(3, pos) : Math.pow(2, pos);
+          }
+
+          function effectiveMult(mat, golem) {
+            const base = 1 + multUpgrades[mat] * MULT_BONUS;
+            return base * effectiveScale(mat, golem);
+          }
+
+          function visibleGolems(mat) {
+            const count = fifthUnlocked[mat] ? 5 : fourthUnlocked[mat] ? 4 : 3;
+            return golems[mat].slice(0, count);
+          }
+
+          // Index of the highest unlocked golem (0-indexed)
+          function lastGolemIdx(mat) {
+            return fifthUnlocked[mat] ? 4 : fourthUnlocked[mat] ? 3 : 2;
+          }
+
+          // Zenith: all unlocked tiers are at exactly 20 (the base cap)
+          function canActivateZenith(mat) {
+            if (!unlocked[mat] || zeniths[mat]) return false;
+            const count = fifthUnlocked[mat] ? 5 : fourthUnlocked[mat] ? 4 : 3;
+            for (let i = 0; i < count; i++) {
+              if (golems[mat][i].bought < 20) return false;
+            }
+            return true;
+          }
+
+          function activateZenith(mat) {
+            if (!canActivateZenith(mat)) return;
+            zeniths[mat] = true;
+          }
+
+          function deactivateZenith(mat) {
+            zeniths[mat] = false;
+          }
+
+          // Combined stats for zenith display
+          function zeniths_totalOwned(mat) {
+            return golems[mat].reduce((s, g) => s + g.bought, 0);
+          }
+          function zeniths_allAutoOn(mat) {
+            return visibleGolems(mat).every(
+              (_, i) => automation[mat][i].purchased && automation[mat][i].on,
+            );
+          }
+          function zeniths_anyAutoOn(mat) {
+            return visibleGolems(mat).some((_, i) => automation[mat][i].on);
+          }
+
+          function cap(mat) {
+            return mat.charAt(0).toUpperCase() + mat.slice(1);
+          }
+
+          function formatNum(n) {
+            n = Math.floor(n);
+            if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
+            if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
+            if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
+            return n.toString();
+          }
+
+          function automationCost(idx) {
+            return Math.pow(4, 3 + idx);
+          }
+
+          function totalOwned(mat) {
+            return golems[mat].reduce((s, g) => s + g.bought, 0);
+          }
+
+          function totalIncome(mat) {
+            const base = 1 + multUpgrades[mat] * MULT_BONUS;
+            const count = fifthUnlocked[mat] ? 5 : fourthUnlocked[mat] ? 4 : 3;
+            return golems[mat]
+              .slice(0, count)
+              .reduce(
+                (s, g) => s + g.bought * base * effectiveScale(mat, g),
+                0,
+              );
+          }
+
+          function prevTabColor(id) {
+            return id === "metal" ? "stone-stat" : "metal-stat";
+          }
+
+          function canAfford(mat, idx) {
+            if (!unlocked[mat]) return false;
+            if (idx === 0)
+              return (
+                totalOwned(mat) < golemCap(mat) && currency[mat] >= g1Cost(mat)
+              );
+            return golems[mat][idx - 1].bought >= higherCost(mat);
+          }
+
+          function getProgress(mat, idx) {
+            if (!unlocked[mat]) return 0;
+            if (idx === 0) {
+              if (totalOwned(mat) >= golemCap(mat)) return 100;
+              return Math.min(100, (currency[mat] / g1Cost(mat)) * 100);
+            }
+            return Math.min(
+              100,
+              (golems[mat][idx - 1].bought / higherCost(mat)) * 100,
+            );
+          }
+
+          /* ── Actions ── */
+
+          function _buy(mat, idx) {
+            if (idx === 0) {
+              currency[mat] -= g1Cost(mat);
+            } else {
+              golems[mat][idx - 1].bought -= higherCost(mat);
+            }
+            golems[mat][idx].bought++;
+          }
+
+          function buyGolem(mat, idx, e) {
+            if (!canAfford(mat, idx)) return;
+            _buy(mat, idx);
+            if (e) spawnParticle(e, golems[mat][idx].icon);
+          }
+
+          function purchaseAutomation(mat, idx, e) {
+            const cost = automationCost(idx);
+            if (currency[mat] < cost) return;
+            currency[mat] -= cost;
+            automation[mat][idx].purchased = true;
+            if (e) spawnParticle(e, "⚡");
+          }
+
+          function toggleAutomation(mat, idx) {
+            if (!automation[mat][idx].purchased) return;
+            automation[mat][idx].on = !automation[mat][idx].on;
+          }
+
+          function buyEmpowerment(mat, e) {
+            const li = lastGolemIdx(mat);
+            if (golems[mat][li].bought < 10) return;
+            golems[mat][li].bought -= 10;
+            multUpgrades[mat]++;
+            if (e) spawnParticle(e, "⬆️");
+          }
+
+          function buyFourthGolem(mat, e) {
+            if (currency[mat] < 10000) return;
+            currency[mat] -= 10000;
+            fourthUnlocked[mat] = true;
+            if (e) spawnParticle(e, "🌋");
+          }
+
+          function buyCapUpgrade(mat, e) {
+            if (capUpgrades[mat] >= MAX_CAP_UPGRADES) return;
+            const cost = capCost(mat);
+            if (currency[mat] < cost) return;
+            currency[mat] -= cost;
+            capUpgrades[mat]++;
+            if (e) spawnParticle(e, "📦");
+          }
+
+          function buyFifthGolem(mat, e) {
+            if (!fourthUnlocked[mat]) return;
+            if (currency[mat] < 20000) return;
+            currency[mat] -= 20000;
+            fifthUnlocked[mat] = true;
+            if (e) spawnParticle(e, "👑");
+          }
+
+          function buyOverdrive(mat, e) {
+            if (currency[mat] < 10000) return;
+            currency[mat] -= 10000;
+            overdriveOn[mat] = true;
+            if (e) spawnParticle(e, "⚡");
+          }
+
+          function spawnParticle(e, icon) {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const p = document.createElement("div");
+            p.className = "float-particle";
+            p.textContent = icon;
+            p.style.left = rect.left + rect.width / 2 - 12 + "px";
+            p.style.top = rect.top - 10 + "px";
+            document.body.appendChild(p);
+            p.addEventListener("animationend", () => p.remove());
+          }
+
+          /* ── Tab unlock ── */
+          function doUnlock(mat) {
+            const prev = mat === "metal" ? "stone" : "metal";
+            currency[prev] -= 5000;
+            unlocked[mat] = true;
+            golems[mat][0].bought++;
+          }
+
+          /* ── Tick ── */
+          const TICK = 0.1;
+          let autoTimer = 0;
+
+          function tick() {
+            if (!unlocked.metal && currency.stone >= 5000) doUnlock("metal");
+            if (!unlocked.gem && currency.metal >= 5000) doUnlock("gem");
+
+            ["stone", "metal", "gem"].forEach((mat) => {
+              if (!unlocked[mat]) return;
+              const base = 1 + multUpgrades[mat] * MULT_BONUS;
+              const count = fifthUnlocked[mat]
+                ? 5
+                : fourthUnlocked[mat]
+                  ? 4
+                  : 3;
+              let inc = 0;
+              for (let i = 0; i < count; i++)
+                inc +=
+                  golems[mat][i].bought *
+                  base *
+                  effectiveScale(mat, golems[mat][i]);
+              currency[mat] += inc * TICK;
+            });
+
+            autoTimer += TICK;
+            if (autoTimer >= 1.0) {
+              autoTimer -= 1.0;
+              ["stone", "metal", "gem"].forEach((mat) => {
+                if (!unlocked[mat]) return;
+                const count = fifthUnlocked[mat]
+                  ? 5
+                  : fourthUnlocked[mat]
+                    ? 4
+                    : 3;
+                for (let idx = 0; idx < count; idx++) {
+                  if (!automation[mat][idx].on) continue;
+                  let safe = 200;
+                  while (canAfford(mat, idx) && safe-- > 0) _buy(mat, idx);
+                }
+              });
+            }
+          }
+
+          /* ── Save / Load ── */
+          const SAVE_KEY = "golem_inc_v5";
+          const saveStatus = ref("");
+          let ssTimer = null;
+
+          function showStatus(msg) {
+            saveStatus.value = msg;
+            clearTimeout(ssTimer);
+            ssTimer = setTimeout(() => {
+              saveStatus.value = "";
+            }, 2500);
+          }
+
+          function saveGame() {
+            try {
+              localStorage.setItem(
+                SAVE_KEY,
+                JSON.stringify({
+                  v: 5,
+                  currency: { ...currency },
+                  unlocked: { ...unlocked },
+                  multUpgrades: { ...multUpgrades },
+                  capUpgrades: { ...capUpgrades },
+                  fourthUnlocked: { ...fourthUnlocked },
+                  fifthUnlocked: { ...fifthUnlocked },
+                  overdriveOn: { ...overdriveOn },
+                  zeniths: { ...zeniths },
+                  golems: {
+                    stone: golems.stone.map((g) => g.bought),
+                    metal: golems.metal.map((g) => g.bought),
+                    gem: golems.gem.map((g) => g.bought),
+                  },
+                  automation: {
+                    stone: automation.stone.map((a) => ({
+                      purchased: a.purchased,
+                      on: a.on,
+                    })),
+                    metal: automation.metal.map((a) => ({
+                      purchased: a.purchased,
+                      on: a.on,
+                    })),
+                    gem: automation.gem.map((a) => ({
+                      purchased: a.purchased,
+                      on: a.on,
+                    })),
+                  },
+                  savedAt: Date.now(),
+                }),
+              );
+              showStatus("saved");
+            } catch (e) {
+              showStatus("error");
+            }
+          }
+
+          function loadGame() {
+            try {
+              const raw = localStorage.getItem(SAVE_KEY);
+              if (!raw) return false;
+              const d = JSON.parse(raw);
+              if (!d || d.v !== 5) return false;
+              currency.stone = d.currency.stone ?? 10;
+              currency.metal = d.currency.metal ?? 0;
+              currency.gem = d.currency.gem ?? 0;
+              unlocked.stone = d.unlocked.stone ?? true;
+              unlocked.metal = d.unlocked.metal ?? false;
+              unlocked.gem = d.unlocked.gem ?? false;
+              if (d.multUpgrades) {
+                multUpgrades.stone = d.multUpgrades.stone ?? 0;
+                multUpgrades.metal = d.multUpgrades.metal ?? 0;
+                multUpgrades.gem = d.multUpgrades.gem ?? 0;
+              }
+              if (d.capUpgrades) {
+                capUpgrades.stone = d.capUpgrades.stone ?? 0;
+                capUpgrades.metal = d.capUpgrades.metal ?? 0;
+                capUpgrades.gem = d.capUpgrades.gem ?? 0;
+              }
+              if (d.fourthUnlocked) {
+                fourthUnlocked.stone = d.fourthUnlocked.stone ?? false;
+                fourthUnlocked.metal = d.fourthUnlocked.metal ?? false;
+                fourthUnlocked.gem = d.fourthUnlocked.gem ?? false;
+              }
+              if (d.fifthUnlocked) {
+                fifthUnlocked.stone = d.fifthUnlocked.stone ?? false;
+                fifthUnlocked.metal = d.fifthUnlocked.metal ?? false;
+                fifthUnlocked.gem = d.fifthUnlocked.gem ?? false;
+              }
+              if (d.overdriveOn) {
+                overdriveOn.stone = d.overdriveOn.stone ?? false;
+                overdriveOn.metal = d.overdriveOn.metal ?? false;
+                overdriveOn.gem = d.overdriveOn.gem ?? false;
+              }
+              if (d.zeniths) {
+                zeniths.stone = d.zeniths.stone ?? false;
+                zeniths.metal = d.zeniths.metal ?? false;
+                zeniths.gem = d.zeniths.gem ?? false;
+              }
+              ["stone", "metal", "gem"].forEach((mat) => {
+                (d.golems[mat] ?? []).forEach((b, i) => {
+                  if (golems[mat][i] !== undefined)
+                    golems[mat][i].bought = b ?? 0;
+                });
+                (d.automation[mat] ?? []).forEach((a, i) => {
+                  if (automation[mat][i] !== undefined) {
+                    automation[mat][i].purchased = a.purchased ?? false;
+                    automation[mat][i].on = a.on ?? false;
+                  }
+                });
+              });
+              return true;
+            } catch (e) {
+              return false;
+            }
+          }
+
+          function resetGame() {
+            if (!confirm("Reset all progress? This cannot be undone.")) return;
+            localStorage.removeItem(SAVE_KEY);
+            currency.stone = 10;
+            currency.metal = 0;
+            currency.gem = 0;
+            unlocked.stone = true;
+            unlocked.metal = false;
+            unlocked.gem = false;
+            ["stone", "metal", "gem"].forEach((mat) => {
+              multUpgrades[mat] = 0;
+              capUpgrades[mat] = 0;
+              fourthUnlocked[mat] = false;
+              fifthUnlocked[mat] = false;
+              overdriveOn[mat] = false;
+              zeniths[mat] = false;
+              golems[mat].forEach((g) => (g.bought = 0));
+              automation[mat].forEach((a) => {
+                a.purchased = false;
+                a.on = false;
+              });
+            });
+            showStatus("reset");
+          }
+
+          let ticker, saveInterval;
+          onMounted(() => {
+            const loaded = loadGame();
+            if (loaded) showStatus("loaded");
+            ticker = setInterval(tick, 100);
+            saveInterval = setInterval(saveGame, 5000);
+            window.addEventListener("beforeunload", saveGame);
+          });
+          onUnmounted(() => {
+            clearInterval(ticker);
+            clearInterval(saveInterval);
+            window.removeEventListener("beforeunload", saveGame);
+          });
+
+          return {
+            mainTab,
+            activeTab,
+            materialTabs,
+            colors,
+            currency,
+            golems,
+            unlocked,
+            automation,
+            multUpgrades,
+            MULT_BONUS,
+            capUpgrades,
+            MAX_CAP_UPGRADES,
+            fourthUnlocked,
+            fifthUnlocked,
+            overdriveOn,
+            zeniths,
+            saveStatus,
+            cap,
+            formatNum,
+            automationCost,
+            golemCap,
+            capCost,
+            g1Cost,
+            higherCost,
+            lastGolemIdx,
+            effectiveScale,
+            effectiveMult,
+            visibleGolems,
+            canActivateZenith,
+            activateZenith,
+            deactivateZenith,
+            zeniths_totalOwned,
+            zeniths_allAutoOn,
+            zeniths_anyAutoOn,
+            totalOwned,
+            totalIncome,
+            prevTabColor,
+            canAfford,
+            getProgress,
+            buyGolem,
+            buyEmpowerment,
+            purchaseAutomation,
+            toggleAutomation,
+            buyCapUpgrade,
+            buyFourthGolem,
+            buyFifthGolem,
+            buyOverdrive,
+            saveGame,
+            resetGame,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
 </html>
